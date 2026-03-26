@@ -252,11 +252,9 @@
                 <button class="btn-premium" onclick="handleGetKey()"><i class="fas fa-bolt"></i> <span data-lang="get_key_now">LẤY KEY NGAY</span></button>
                 <a href="https://t.me/Jetjet2000" style="text-decoration:none"><button class="btn-outline"><i class="fas fa-shopping-cart"></i> <span data-lang="buy_key">MUA KEY ADMIN</span></button></a>
 
-                <a href="https://t.me/Jetjet2000" style="text-decoration:none">
-                       <button class="btn-outline" style="margin-top: 10px; border-color: #ffb700; color: #ffb700;">
-                              <i class="fab fa-apple"></i> <span data-lang="buy_fc_ios">MUA HACK FC IOS</span>
+                       <button class="btn-outline" onclick="handleBuyFCIOS()" style="margin-top: 10px; border-color: #ffb700; color: #ffb700;">
+                               <i class="fab fa-apple"></i> <span data-lang="buy_fc_ios">MUA HACK FC IOS</span>
                        </button>
-                </a>
 
                 </div>
 
@@ -316,6 +314,22 @@
     </div>
 
     <script>
+function handleBuyFCIOS() {
+            // Nội dung bảng giá - Đã xóa dấu và in hoa theo ý bạn
+            const title = "BANG GIA HACK FC IOS";
+            const priceText = `
+                <div style="text-align: left; margin: 15px 0; font-weight: 800; line-height: 2; color: #fff;">
+                    <p style="margin: 5px 0;">💎 200.000VND - VINH VIEN</p>
+                    <p style="margin: 5px 0;">⭐ 100.000VND - 12 THANG</p>
+                    <p style="margin: 5px 0;">🔥 50.000VND - 06 THANG</p>
+                </div>
+                <p style="font-size: 11px; color: #aaa;">AN DONG Y DE DEN TELEGRAM ADMIN</p>
+            `;
+
+            // Gọi hàm openConfirm có sẵn để hiện 2 nút DONG Y và HUY
+            openConfirm(title, priceText, "https://t.me/Jetjet2000");
+        }
+
         // --- HỆ THỐNG DỊCH THUẬT ---
         const translations = {
             vi: {
