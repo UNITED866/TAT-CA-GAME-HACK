@@ -2,346 +2,532 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CLOUDVIP PRO - PREMIUM SYSTEM</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VH MODS - Get Key & Download</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@900&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .tab-content { display: none; }
-        .tab-active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-item.active { color: #2563eb; transform: translateY(-5px); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .font-black { font-weight: 900 !important; }
-        #main-app { display: none; }
-        .btn-active:active { transform: scale(0.95); }
-        #reset-timer { font-weight: 900 !important; font-style: italic; letter-spacing: -1px; }
+.goodboy-text {
+            font-family: 'Lexend', sans-serif;
+            font-size: 35px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            background: linear-gradient(to right, #00f2ff, #7000ff, #00f2ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shineText 3s linear infinite, textPulse 2s ease-in-out infinite;
+        }
+        @keyframes shineText { to { background-position: 200% center; } }
+        @keyframes textPulse {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(0, 242, 255, 0.4)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 20px rgba(112, 0, 255, 0.8)); transform: scale(1.08); }
+        }
+
+        :root {
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --bg-dark: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-high;light-color: transparent; }
+        body, html { margin: 0; padding: 0; font-family: 'Lexend', 'Segoe UI', sans-serif; background-color: var(--bg-dark); color: var(--text); height: 100%; width: 100%; overflow: hidden; }
+
+        /* --- LANG SELECTOR --- */
+        .lang-picker {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 100001;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--primary);
+            backdrop-filter: blur(10px);
+            padding: 5px 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            bo#auth-screen { position: fixed; inset: 0; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 10000; transition: 0.5s ease-in-out; }
+        .auth-content { text-align: center; }
+        .auth-logo { width: 80px; height: 80px; margin: 0 auto 20px; overflow: hidden; }
+        .auth-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; }x-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+        }
+        .lang-picker select {
+            background: transparent;
+            color: white;
+            border: none;
+            outline: none;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .lang-picker i { color: var(--primary); font-size: 14px; }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .area { background: #000; width: 100%; height:100vh; position: fixed; top:0; left:0; z-index: -1; }
+        .circles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; margin:0; padding:0; }
+        .circles li { position: absolute; display: block; list-style: none; width: 20px; height: 20px; background: rgba(0, 242, 255, 0.1); animation: animate 25s linear infinite; bottom: -150px; border-radius: 50%; }
+        .circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+        @keyframes animate { 0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; } 100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; } }
+
+        /* --- TOAST --- */
+        #toast { position: fixed; top: 20px; right: -350px; background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(10px); border: 1px solid var(--primary); padding: 15px 25px; border-radius: 15px; display: flex; align-items: center; gap: 10px; z-index: 100000; transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
+        #toast.show { right: 20px; }
+
+        /* --- AUTH SCREEN --- */
+        /* --- ĐÃ CẬP NHẬT HIỆU ỨNG LẮC LƯ --- */
+        #auth-screen { position: fixed; inset: 0; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 10000; transition: 0.5s ease-in-out; }
+        .auth-content { text-align: center; }
+        
+        .auth-logo { 
+            width: 100px; 
+            height: 100px; 
+            margin: 0 auto 25px; 
+            position: relative;
+            padding: 4px; 
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.4);
+            /* Gọi hiệu ứng lắc lư */
+            animation: lacLuUpDown 3s ease-in-out infinite; 
+        }
+
+        .auth-logo img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 21px;
+            border: 3px solid #000;
+        }
+
+        /* Định nghĩa hiệu ứng lắc lư lên xuống */
+        @keyframes lacLuUpDown {
+            0%, 100% {
+                transform: translateY(0px);
+                box-shadow: 0 5px 15px rgba(0, 242, 255, 0.4);
+            }
+            50% {
+                transform: translateY(-15px);
+                box-shadow: 0 20px 30px rgba(0, 242, 255, 0.2);
+            }
+        }
+        
+        /* --- POPUP OVERLAY --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0); backdrop-filter: blur(0px); display: none; justify-content: center; align-items: center; z-index: 20000; transition: 0.4s ease; }
+        .modal-overlay.show { background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); }
+        
+        .modal-card { background: var(--glass); border: 1px solid var(--glass-border); width: 90%; max-width: 380px; border-radius: 30px; padding: 30px; text-align: center; transform: scale(0.7); opacity: 0; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .modal-overlay.show .modal-card { transform: scale(1); opacity: 1; }
+        .modal-overlay.closing .modal-card { transform: scale(0.7); opacity: 0; }
+
+        /* --- LOADING SPINNER --- */
+        .spinner { width: 45px; height: 45px; border: 4px solid rgba(0, 242, 255, 0.1); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .gold-tag { background: rgba(255, 77, 77, 0.15); color: #ff4d4d; padding: 8px 15px; border-radius: 12px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 20px; border: 1px solid rgba(255, 77, 77, 0.2); }
+        .warning-box { background: rgba(255, 255, 255, 0.03); border: 1px dashed #ff4d4d; border-radius: 15px; padding: 15px; margin: 20px 0; color: #ff6b6b; font-size: 12px; font-weight: bold; }
+
+        /* --- MAIN UI --- */
+        #main-content { display: none; height: 100vh; overflow-y: auto; flex-direction: column; align-items: center; padding: 20px; z-index: 10; transform: scale(1.1); opacity: 0; transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+        #main-content.show { display: flex; transform: scale(1); opacity: 1; }
+        
+        .container { width: 100%; max-width: 450px; }
+        .glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 30px; padding: 25px; margin-bottom: 20px; }
+
+        .title-flex { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 20px; text-transform: uppercase; }
+        .time-pill { background: #000; border: 1px solid var(--primary); color: var(--primary); padding: 5px 15px; border-radius: 50px; font-size: 13px; font-weight: 900; }
+
+        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .game-tag { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 15px; border-radius: 18px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; color: #aaa; text-align: center; }
+        .game-tag.active { background: linear-gradient(45deg, var(--primary), var(--secondary)); color: #000; border: none; transform: scale(1.05); }
+
+        .btn-premium { background: linear-gradient(90deg, var(--primary), var(--secondary)); color: #000; border: none; padding: 18px; border-radius: 20px; font-weight: 900; width: 100%; cursor: pointer; font-size: 15px; transition: 0.3s; margin-bottom: 12px; }
+        .btn-outline { background: transparent; border: 1px solid var(--glass-border); color: #fff; padding: 15px; border-radius: 20px; width: 100%; font-weight: 700; cursor: pointer; font-size: 13px; }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-cancel { background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 15px; border-radius: 15px; flex: 1; font-weight: 700; cursor: pointer; }
+
+        .dl-list { display: flex; flex-direction: column; gap: 12px; }
+        .dl-card { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); padding: 16px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; text-decoration: none; cursor: pointer; transition: 0.3s; }
+        .dl-card:hover { background: rgba(255,255,255,0.05); }
+        .dl-name { display: flex; align-items: center; gap: 15px; color: #fff; font-size: 14px; font-weight: 600; }
+        .dl-name i { color: var(--primary); font-size: 18px; }
+        .dl-badge { font-size: 9px; background: rgba(0, 242, 255, 0.1); color: var(--primary); padding: 4px 8px; border-radius: 8px; font-weight: 800; border: 1px solid rgba(0, 242, 255, 0.2); }
+
+        .social-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .social-btn { background: rgba(36, 129, 204, 0.1); border: 1px solid rgba(36, 129, 204, 0.2); padding: 15px; border-radius: 20px; text-align: center; text-decoration: none; color: #2481cc; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+        #lixiBox { position: fixed; inset: 0; pointer-events: none; z-index: 99999; }
+        .lixi { position: absolute; top: -50px; width: 15px; height: 25px; background: #d40000; border: 1px solid #ffd700; border-radius: 4px; animation: fall linear forwards; display: flex; justify-content: center; align-items: center; color: #ffd700; font-size: 8px; }
+        .lixi::after { content: '福'; }
+        @keyframes fall { 100% { transform: translateY(110vh) rotate(360deg); } }
+        
+        .verify-tick { color: #007bff; font-size: 12px; margin-left: 3px; vertical-align: middle; }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6 bg-white">
-        <div class="w-full max-w-md space-y-10">
-            <div class="text-center space-y-2">
-                <h1 class="text-4xl font-black tracking-tighter text-blue-700 italic uppercase">CloudVip</h1>
-                <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Hệ thống kiếm tiền Premium</p>
+    <div class="lang-picker">
+        <i class="fas fa-globe"></i>
+        <select id="langSelect" onchange="changeLanguage()">
+            <option value="vi">VIE</option>
+            <option value="en">ENG</option>
+        </select>
+    </div>
+
+    <div class="area"><ul class="circles"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul></div>
+    <div id="toast"><i class="fas fa-check-circle" style="color:var(--primary)"></i> <span id="toast-msg"></span></div>
+    <div id="lixiBox"></div>
+
+    <div id="auth-screen">
+        <div class="auth-content">
+            <div class="auth-logo">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgJ7WT05MQiGEF8hJuf7ihlDYBVYGjAFI1L6QyA7lojVe8yfPhGMezvFQdGKZXgFIvcpv9wlrsN3f7vAxpAHP3TNGtLDYHCbZHOivr66v9WO2ExDQ8RgVwcdpYkfNyJ5KnXxM1uVxfI7tATU-ECZVbTfEF3jD_5c42-XAUX5AZi2VkWcTpJVOduMzVwan4/s800/1000028419.webp" alt="Logo">
             </div>
+            <h1 class="goodboy-text">GOOD BOY</h1>
+            <div style="font-size: 10px; color: #fff; letter-spacing: 3px; margin-top: -5px; opacity: 0.7;">OWNER: VAN HIEP <i class="fas fa-check-circle" style="color: #00f2ff; font-size: 9px;"></i></div>
+            <p style="color: #666; font-size: 12px; margin-bottom: 40px;" data-lang="system_sec">System Premium Security</p>
+            <button class="btn-premium" style="width: 200px;" onclick="openNotice()" data-lang="access">TRUY CẬP</button>
+        </div>
+    </div>
 
-            <div class="bg-gray-50 p-2 rounded-[30px] flex shadow-inner">
-                <button id="btn-login" onclick="switchAuth('login')" class="w-1/2 py-3.5 rounded-xl font-black text-[11px] uppercase bg-white shadow-md text-blue-700">Đăng Nhập</button>
-                <button id="btn-reg" onclick="switchAuth('reg')" class="w-1/2 py-3.5 rounded-xl font-black text-[11px] uppercase text-gray-400">Đăng Ký</button>
+    <div id="notice-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="gold-tag"><i class="fas fa-crown"></i> <span data-lang="sys_notice">THÔNG BÁO HỆ THỐNG</span></div>
+            <div style="font-weight: 800; font-size: 14px; color: var(--primary); margin-bottom: 10px;" data-lang="reset_time">🕒 RESET KEY: 00 GIỜ MỖI NGÀY</div>
+            <p style="font-size: 13px; color: #aaa; line-height: 1.6;" data-lang="mission_text">Hoàn thành nhiệm vụ ngắn để lấy mã kích hoạt sử dụng trong 24h.</p>
+            <div class="warning-box">
+                <span data-lang="warning">⚠️ CẢNH BÁO: CHỈ 1 KEY / 1 MÁY</span><br>
+                <span style="opacity: 0.7; font-weight: 400;">VanHiep Đẹp Trai <i class="fas fa-check-circle verify-tick"></i></span>
             </div>
+            <button class="btn-premium" onclick="enterMain()" data-lang="understand">ĐÃ HIỂU</button>
+        </div>
+    </div>
 
-            <div class="space-y-4">
-                <input id="au-user" type="text" placeholder="TÊN ĐĂNG NHẬP" class="w-full bg-gray-50 border-none px-6 py-4.5 rounded-2xl text-[12px] font-black focus:ring-2 focus:ring-blue-600 outline-none h-16">
-                <input id="au-pass" type="password" placeholder="MẬT MÃ" class="w-full bg-gray-50 border-none px-6 py-4.5 rounded-2xl text-[12px] font-black focus:ring-2 focus:ring-blue-600 outline-none h-16">
-                <button onclick="handleAuth()" class="w-full bg-blue-700 text-white py-5 rounded-[25px] font-black text-[12px] uppercase shadow-2xl shadow-blue-200 btn-active tracking-widest">Xác nhận hệ thống</button>
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div id="confirm-content">
+                <div id="confirm-icon" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-question-circle"></i></div>
+                <h2 id="confirm-title" style="font-size: 18px; margin-bottom: 10px;" data-lang="confirm_title">XÁC NHẬN</h2>
+                <p id="confirm-text" style="font-size: 14px; color: #ccc; line-height: 1.5;">...</p>
+                <div class="btn-group">
+                    <button class="btn-cancel" onclick="closeConfirm()" data-lang="cancel">HỦY</button>
+                    <button class="btn-premium" style="margin-bottom:0; flex:2;" id="confirm-yes-btn" data-lang="agree">ĐỒNG Ý</button>
+                </div>
+            </div>
+            <div id="redirect-loading" style="display: none;">
+                <div class="spinner"></div>
+                <h2 style="color: var(--primary); font-size: 18px; margin: 0;" data-lang="redirecting">Đang chuyển hướng...</h2>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;" data-lang="wait_moment">Vui lòng chờ trong giây lát</p>
             </div>
         </div>
     </div>
 
-    <div id="main-app" class="pb-32">
-        <header class="bg-white px-6 pt-10 pb-10 rounded-b-[50px] shadow-sm relative overflow-hidden">
-            <div class="relative z-10 flex justify-between items-center">
-                <div>
-                    <h2 class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Xin chào,</h2>
-                    <p id="txt-user" class="text-xl font-black text-gray-900 italic uppercase">USER</p>
+    <audio id="bgMusic" loop><source src="https://files.catbox.moe/tqpdcj.mp3" type="audio/mpeg"></audio>
+
+    <div id="main-content">
+        <div class="container">
+            <div class="glass-card" style="text-align: center;">
+                <div class="title-flex"><i class="fas fa-key"></i> <span data-lang="get_free_key">Nhận Key Miễn Phí</span></div>
+                <div style="margin-bottom: 25px; display: flex; flex-direction: column; gap: 8px; align-items: center;">
+                       <span class="time-pill" id="realTime" style="font-size: 18px; padding: 8px 20px;">00:00:00</span>
+                       <span id="realDate" style="color: var(--primary); font-size: 12px; font-weight: 800; letter-spacing: 1px; opacity: 0.8;">00/00/2024</span>
                 </div>
-                <div class="bg-blue-50 px-4 py-2 rounded-2xl">
-                    <span id="txt-balance" class="text-blue-700 font-black text-sm italic">0</span>
-                    <span class="text-[10px] font-black text-blue-300 ml-1">XU</span>
+                
+                <div class="game-grid">
+                    <div class="game-tag" onclick="selectGame(this, '8 BALL POOL')">8 BALL POOL</div>
+                    <div class="game-tag" onclick="selectGame(this, 'FC MOBILE')">FC MOBILE</div>
+                    <div class="game-tag" onclick="selectGame(this, 'LIÊN QUÂN')">LIÊN QUÂN</div>
+                    <div class="game-tag" onclick="selectGame(this, 'LIÊN QUÂN IOS')">LIÊN QUÂN IOS</div>
+                    <div class="game-tag" onclick="selectGame(this, 'PUBG')">PUBG</div>
+                    <div class="game-tag" onclick="selectGame(this, 'PLAY TOGETHER')">PLAY TOGETHER</div>
+                </div>
+
+                <button class="btn-premium" onclick="handleGetKey()"><i class="fas fa-bolt"></i> <span data-lang="get_key_now">LẤY KEY NGAY</span></button>
+                <a href="https://t.me/Jetjet20000" style="text-decoration:none"><button class="btn-outline"><i class="fas fa-shopping-cart"></i> <span data-lang="buy_key">MUA KEY ADMIN</span></button></a>
+
+                       <button class="btn-outline" onclick="handleBuyFCIOS()" style="margin-top: 10px; border-color: #ffb700; color: #ffb700;">
+                               <i class="fab fa-apple"></i> <span data-lang="buy_fc_ios">MUA HACK FC IOS</span>
+                       </button>
+
+                </div>
+
+            <div class="glass-card">
+                <div class="title-flex"><i class="fas fa-cloud-download-alt"></i> <span data-lang="dl_mod">Download Game Mod</span></div>
+                <div class="dl-list">
+                    <div class="dl-card" onclick="handleDownload('FC MOBILE - QUỐC TẾ', 'https://vuotnhanh.com/jF94')">
+                        <div class="dl-name"><i class="fas fa-gamepad"></i> FC MOBILE</div>
+                        <span class="dl-badge" data-lang="global">QUỐC TẾ</span>
+                    </div>
+                    <div class="dl-card" onclick="handleDownload('FC MOBILE - VIỆT NAM', 'https://vuotnhanh.com/edG9')">
+                        <div class="dl-name"><i class="fas fa-gamepad"></i> FC MOBILE</div>
+                        <span class="dl-badge" data-lang="vn">VIỆT NAM</span>
+                    </div>
+                    <div class="dl-card" onclick="handleDownload('LIÊN QUÂN - 64 BIT', 'https://vuotnhanh.com/ekzk')">
+                        <div class="dl-name"><i class="fas fa-shield-alt"></i> LIÊN QUÂN</div>
+                        <span class="dl-badge">64 BIT</span>
+                    </div>
+                    <div class="dl-card" onclick="handleDownload('LIÊN QUÂN - 32 BIT', 'https://vuotnhanh.com/DOb2')">
+                        <div class="dl-name"><i class="fas fa-shield-alt"></i> LIÊN QUÂN</div>
+                        <span class="dl-badge">32 BIT</span>
+                    </div>
+                    <div class="dl-card" onclick="handleDownload('LIÊN QUÂN IOS', 'https://vuotnhanh.com/Vysq')">
+                        <div class="dl-name"><i class="fas fa-shield-alt"></i> LIÊN QUÂN IOS</div>
+                        <span class="dl-badge">IOS</span>
+                    </div>
+                    <div class="dl-card" onclick="handleDownload('PUBG MOBILE - VNG & QT', 'https://vuotnhanh.com/CrHr')">
+                        <div class="dl-name"><i class="fas fa-crosshairs"></i> PUBG MOBILE</div>
+                        <span class="dl-badge">VNG</span>
+                    </div>
+                    <div class="dl-card" onclick="handleDownload('PLAY TOGETHER', 'https://vuotnhanh.com/UDUP')">
+                        <div class="dl-name"><i class="fas fa-home"></i> PLAY TOGETHER</div>
+                        <span class="dl-badge">VNG</span>
+                    </div>
+                    <div class="dl-card" onclick="handleDownload('8 BALL POOL VIP', 'https://vuotnhanh.com/oxVm')">
+                        <div class="dl-name"><i class="fas fa-circle"></i> 8 BALL POOL</div>
+                        <span class="dl-badge">VIP</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-10 bg-blue-700 rounded-[40px] p-8 text-white relative overflow-hidden shadow-2xl shadow-blue-200">
-                <p class="text-[10px] font-black opacity-60 uppercase tracking-widest">Số dư khả dụng</p>
-                <div class="flex items-end space-x-2 mt-1">
-                    <h3 id="txt-main-balance" class="text-4xl font-black italic">0</h3>
-                    <span class="text-xs font-black opacity-60 mb-1.5 uppercase tracking-tighter">XU</span>
-                </div>
-                <div class="grid grid-cols-2 gap-4 mt-8 pt-8 border-t border-blue-600/50">
-                    <div>
-                        <p class="text-[9px] font-black opacity-50 uppercase tracking-tighter text-blue-100">Nhiệm vụ xong</p>
-                        <p id="txt-today-tasks" class="font-black text-sm mt-1">0</p>
-                    </div>
-                    <div>
-                        <p class="text-[9px] font-black opacity-50 uppercase tracking-tighter text-blue-100">Tổng thu nhập</p>
-                        <p id="txt-total-earned" class="font-black text-sm mt-1">0</p>
-                    </div>
-                </div>
-            </div>
-        </header>
+            <div class="social-row">
+    <a href="https://t.me/vhmodsgames" class="social-btn" target="_blank">
+        <i class="fab fa-telegram-plane"></i> 
+        <span>KÊNH CHÍNH<i class="fas fa-check-circle" style="color: #007bff; font-size: 10px; margin-left: 3px;"></i></span>
+    </a>
+    <a href="https://t.me/vhmodsgamechat" class="social-btn" target="_blank">
+        <i class="fab fa-telegram-plane"></i> 
+        <span>NHÓM CHAT <i class="fas fa-check-circle" style="color: #007bff; font-size: 10px; margin-left: 3px;"></i></span>
+    </a>
+</div>
 
-        <main class="px-6 mt-8">
-            <div id="tab-home" class="tab-content tab-active space-y-6">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-black text-sm uppercase tracking-tighter text-gray-900 italic">Nhiệm vụ hôm nay</h3>
-                    <div class="bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-100">
-                        <span id="reset-timer" class="text-[10px] text-blue-600">--:--:--</span>
-                    </div>
-                </div>
-                <div id="task-list" class="space-y-4"></div>
-            </div>
-
-            <div id="tab-withdraw" class="tab-content space-y-6">
-                <h3 class="font-black text-sm uppercase tracking-tighter text-gray-900 italic">Rút tiền về ngân hàng</h3>
-                <div class="bg-white p-6 rounded-[40px] shadow-sm border border-gray-100 space-y-4">
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-gray-400 uppercase ml-2 tracking-widest">Ngân hàng / Ví</label>
-                        <input id="wd-bank" type="text" placeholder="VÍ DỤ: MBBANK, MOMO..." class="w-full bg-gray-50 border-none px-6 py-4 rounded-2xl text-[11px] font-black outline-none focus:ring-1 focus:ring-blue-600">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-gray-400 uppercase ml-2 tracking-widest">Số tài khoản</label>
-                        <input id="wd-stk" type="text" placeholder="NHẬP SỐ TÀI KHOẢN" class="w-full bg-gray-50 border-none px-6 py-4 rounded-2xl text-[11px] font-black outline-none focus:ring-1 focus:ring-blue-600">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-gray-400 uppercase ml-2 tracking-widest">Tên chủ thẻ</label>
-                        <input id="wd-name" type="text" placeholder="VIET HOA KHONG DAU" class="w-full bg-gray-50 border-none px-6 py-4 rounded-2xl text-[11px] font-black outline-none focus:ring-1 focus:ring-blue-600">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[9px] font-black text-gray-400 uppercase ml-2 tracking-widest">Số xu muốn rút</label>
-                        <input id="wd-amount" type="number" placeholder="TỐI THIỂU 100.000 XU" class="w-full bg-gray-50 border-none px-6 py-4 rounded-2xl text-[11px] font-black outline-none focus:ring-1 focus:ring-blue-600">
-                    </div>
-                    <button onclick="handleWd()" class="w-full bg-blue-700 text-white py-5 rounded-3xl font-black text-[11px] uppercase shadow-xl shadow-blue-100 btn-active">Xác nhận rút tiền</button>
-                    <p class="text-center text-[8px] text-gray-400 font-black uppercase italic italic">Yêu cầu được duyệt từ 1-24h</p>
-                </div>
-            </div>
-
-            <div id="tab-profile" class="tab-content">
-                <div class="bg-white p-6 rounded-[40px] shadow-sm border border-gray-100 space-y-6">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-700 text-xl"><i class="fas fa-user-shield"></i></div>
-                        <div>
-                            <p id="user-ip" class="text-[9px] font-black text-gray-400 uppercase">IP: ---</p>
-                            <p class="text-xs font-black text-gray-900 uppercase italic">TÀI KHOẢN PREMIUM</p>
-                        </div>
-                    </div>
-                    <button onclick="logout()" class="w-full py-4 rounded-2xl text-[10px] font-black uppercase text-red-500 bg-red-50">Đăng xuất</button>
-                </div>
-            </div>
-        </main>
-
-        <nav class="fixed bottom-6 left-6 right-6 bg-white/90 backdrop-blur-xl h-20 rounded-[30px] shadow-2xl flex items-center justify-around px-4 border border-white/10 z-40">
-            <button onclick="switchTab('home', this)" class="nav-item active flex flex-col items-center space-y-1">
-                <i class="fas fa-layer-group text-lg"></i>
-                <span class="text-[9px] font-black uppercase">Nhiệm vụ</span>
-            </button>
-            <button onclick="switchTab('withdraw', this)" class="nav-item flex flex-col items-center space-y-1 text-gray-400">
-                <i class="fas fa-building-columns"></i>
-                <span class="text-[9px] font-black uppercase">Rút tiền</span>
-            </button>
-            <button onclick="switchTab('profile', this)" class="nav-item flex flex-col items-center space-y-1 text-gray-400">
-                <i class="fas fa-fingerprint text-lg"></i>
-                <span class="text-[9px] font-black uppercase">Cá nhân</span>
-            </button>
-        </nav>
-    </div>
-
-    <div id="verify-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden items-center justify-center p-8">
-        <div class="bg-white w-full max-w-sm rounded-[45px] p-10 text-center">
-            <div id="verify-loading" class="space-y-4">
-                <div class="w-16 h-16 border-4 border-blue-100 border-t-blue-700 rounded-full animate-spin mx-auto"></div>
-                <p class="text-[10px] font-black text-gray-900 uppercase italic">Đang kiểm tra hệ thống...</p>
-            </div>
-            <div id="verify-success" class="hidden space-y-6">
-                <div class="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center text-2xl mx-auto"><i class="fas fa-check"></i></div>
-                <h3 class="text-xl font-black text-gray-900 uppercase italic tracking-tighter">THÀNH CÔNG!</h3>
-                <button onclick="claimReward()" class="w-full bg-gray-900 text-white py-5 rounded-[25px] font-black text-[11px] uppercase btn-active">Nhận thưởng ngay</button>
-            </div>
+            <footer style="text-align:center; margin: 20px 0; color: #555;">
+                POWERED BY <b>VANHIEP <i class="fas fa-crown" style="color: #ffd700; font-size: 12px;"></i> <i class="fas fa-check-circle" style="color:#007bff; font-size:10px;"></i></b>
+            </footer>
         </div>
     </div>
 
     <script>
-        const TASKS = [
-            { id: 'upto3', name: 'Upto 3 Steps', reward: 375, limit: 1000, url: 'https://uptolink.one/st?api=dc765daabf403cde36274f0aa4ee203405c0a6bc&url=https://united866.github.io/KiemTienTieu/?task=upto3&status=success' },
-            { id: 'upto2', name: 'Upto 2 Steps', reward: 350, limit: 1000, url: 'https://uptolink.one/st?api=dc765daabf403cde36274f0aa4ee203405c0a6bc&url=https://united866.github.io/KiemTienTieu/?task=upto2&status=success' },
-            { id: 'nhapma', name: 'Nhapma.net', reward: 250, limit: 3, url: 'https://service.nhapma.com/st?token=f8ab8870-f2ac-42ca-9f73-fc8a0f89369d&url=https://united866.github.io/KiemTienTieu/?task=nhapma&status=success' },
-            { id: 'taplayma', name: 'TapLayMa.net', reward: 250, limit: 3, url: 'https://api.taplayma.com/st?token=9056f859-315a-4f12-a017-9dd5d6e73ac9&url=https://united866.github.io/KiemTienTieu/?task=taplayma&status=success' },
-            { id: 'layma', name: 'LayMa.net', reward: 275, limit: 2, url: 'https://api.layma.net/api/admin/shortlink/quicklink?tokenUser=35aaa8008b3b29e51993f0c9df180143&url=https://united866.github.io/KiemTienTieu/?task=layma&status=success' },
-            { id: 'link4m', name: 'Link4m.co', reward: 400, limit: 2, url: 'https://link4m.co/st?api=690b7843600dcc0b58617bc8&url=https://united866.github.io/KiemTienTieu/?task=link4m&status=success' },
-            { id: 'traffictot', name: 'TrafficTot.vn', reward: 700, limit: 6, url: 'https://services.traffictot.com/api/v1?api_key=3c712aa2a6db641d8fe870b01fc231d8d6cb6637c031e8a5b12503cde460ff2b&url=https://united866.github.io/KiemTienTieu/?task=traffictot&status=success' }
-        ];
+function handleBuyFCIOS() {
+            // Nội dung bảng giá - Đã xóa dấu và in hoa theo ý bạn
+            const title = "BANG GIA HACK FC IOS";
+            const priceText = `
+                <div style="text-align: left; margin: 15px 0; font-weight: 800; line-height: 2; color: #fff;">
+                    <p style="margin: 5px 0;">💎 240.000VND - VINH VIEN</p>
+                    <p style="margin: 5px 0;">⭐ 130.000VND - 12 THANG</p>
+                    <p style="margin: 5px 0;">🔥 80.000VND - 06 THANG</p>
+                </div>
+                <p style="font-size: 11px; color: #aaa;">AN DONG Y DE DEN TELEGRAM ADMIN</p>
+            `;
 
-        let currentUser = null;
-        let data = {};
-        let userIP = '...';
+            // Gọi hàm openConfirm có sẵn để hiện 2 nút DONG Y và HUY
+            openConfirm(title, priceText, "https://t.me/Jetjet20000");
+        }
 
-        window.onload = () => {
-            fetch('https://api.ipify.org?format=json').then(r => r.json()).then(j => {
-                userIP = j.ip;
-                document.getElementById('user-ip').innerText = "IP: " + userIP;
-            });
-            checkLogin();
-            startResetTimer();
+        // --- HỆ THỐNG DỊCH THUẬT ---
+        const translations = {
+            vi: {
+                system_sec: "System Premium Security",
+                access: "TRUY CẬP",
+                sys_notice: "THÔNG BÁO HỆ THỐNG",
+                reset_time: "🕒 RESET KEY: 00 GIỜ MỖI NGÀY",
+                mission_text: "Hoàn thành nhiệm vụ ngắn để lấy mã kích hoạt sử dụng trong 24h.",
+                warning: "⚠️ CẢNH BÁO: CHỈ 1 KEY / 1 MÁY",
+                understand: "ĐÃ HIỂU",
+                confirm_title: "XÁC NHẬN",
+                cancel: "HỦY",
+                agree: "ĐỒNG Ý",
+                redirecting: "Đang chuyển hướng...",
+                wait_moment: "Vui lòng chờ trong giây lát",
+                get_free_key: "Nhận Key Miễn Phí",
+                get_key_now: "LẤY KEY NGAY",
+                buy_key: "MUA KEY ADMIN",
+                buy_fc_ios: "MUA HACK FC IOS",
+                dl_mod: "Download Game Mod",
+                global: "QUỐC TẾ",
+                vn: "VIỆT NAM",
+                news_ch: "KÊNH TIN",
+                chat_gr: "NHÓM CHAT",
+                toast_select: "Đã chọn: ",
+                toast_warn_select: "Vui lòng chọn game trước!",
+                conf_get_key_desc: "Bạn muốn lấy mã kích hoạt cho game",
+                conf_dl_desc: "Bắt đầu tải bản mod:"
+            },
+            en: {
+                system_sec: "System Premium Security",
+                access: "ACCESS",
+                sys_notice: "SYSTEM NOTICE",
+                reset_time: "🕒 RESET KEY: 00:00 DAILY",
+                mission_text: "Complete short tasks to get an activation key valid for 24h.",
+                warning: "⚠️ WARNING: ONLY 1 KEY PER DEVICE",
+                understand: "UNDERSTOOD",
+                confirm_title: "CONFIRMATION",
+                cancel: "CANCEL",
+                agree: "AGREE",
+                redirecting: "Redirecting...",
+                wait_moment: "Please wait a moment",
+                get_free_key: "Get Free Key",
+                get_key_now: "GET KEY NOW",
+                buy_key: "BUY ADMIN KEY",
+                buy_fc_ios: "BUY HACK FC IOS",
+                dl_mod: "Download Game Mod",
+                global: "GLOBAL",
+                vn: "VIETNAM",
+                news_ch: "NEWS",
+                chat_gr: "CHAT GROUP",
+                toast_select: "Selected: ",
+                toast_warn_select: "Please select a game first!",
+                conf_get_key_desc: "Do you want to get the key for",
+                conf_dl_desc: "Start downloading mod:"
+            }
         };
 
-        function startResetTimer() {
-            const timerElement = document.getElementById('reset-timer');
-            const update = () => {
-                const now = new Date();
-                const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-                const diff = tomorrow - now;
-                const h = Math.floor(diff / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((diff % (1000 * 60)) / 1000);
-                timerElement.innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-                if (h === 0 && m === 0 && s === 0) location.reload();
-            };
-            update(); setInterval(update, 1000);
-        }
+        let currentLang = 'vi';
+        const audio = document.getElementById("bgMusic");
+        const noticeModal = document.getElementById('notice-modal');
+        const confirmModal = document.getElementById('confirm-modal');
+        const mainContent = document.getElementById('main-content');
+        const authScreen = document.getElementById('auth-screen');
+        const confirmContent = document.getElementById('confirm-content');
+        const redirectLoading = document.getElementById('redirect-loading');
 
-        function checkLogin() {
-            currentUser = localStorage.getItem('user');
-            if(currentUser) {
-                document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('main-app').style.display = 'block';
-                loadData();
-                handleRedirectCallback();
-            }
-        }
-
-        function handleAuth() {
-            const u = document.getElementById('au-user').value.trim();
-            const p = document.getElementById('au-pass').value.trim();
-            if(!u || !p) return alert("Vui lòng nhập đủ thông tin!");
-            let accs = JSON.parse(localStorage.getItem('cl_v5_accs')) || {};
-            if(window.authMode === 'reg') {
-                if(accs[u]) return alert("Tài khoản đã tồn tại!");
-                accs[u] = { pass: p, balance: 0, today: 0, earned: 0, counts: {} };
-                localStorage.setItem('cl_v5_accs', JSON.stringify(accs));
-                alert("Đăng ký OK! Hãy đăng nhập."); switchAuth('login');
-            } else {
-                if(accs[u] && accs[u].pass === p) {
-                    localStorage.setItem('user', u);
-                    checkLogin();
-                } else alert("Sai tài khoản hoặc mật khẩu!");
-            }
-        }
-
-        function loadData() {
-            let accs = JSON.parse(localStorage.getItem('cl_v5_accs')) || {};
-            data = accs[currentUser];
-            if(!data) return logout();
-            checkDailyReset();
-            updateUI();
-            renderTasks();
-        }
-
-        function handleRedirectCallback() {
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('status') === 'success' && params.get('task') && currentUser) {
-                document.getElementById('verify-modal').style.display = 'flex';
-                setTimeout(() => {
-                    document.getElementById('verify-loading').classList.add('hidden');
-                    document.getElementById('verify-success').classList.remove('hidden');
-                    window.pendingTask = params.get('task');
-                }, 2000);
-            }
-        }
-
-        function claimReward() {
-            const taskId = window.pendingTask;
-            let accs = JSON.parse(localStorage.getItem('cl_v5_accs')) || {};
-            let uData = accs[currentUser];
-            const config = TASKS.find(t => t.id === taskId);
-            if (config && uData) {
-                uData.counts = uData.counts || {};
-                const done = uData.counts[taskId] || 0;
-                if (done < config.limit) {
-                    uData.balance += config.reward;
-                    uData.earned += config.reward;
-                    uData.today += 1;
-                    uData.counts[taskId] = done + 1;
-                    accs[currentUser] = uData;
-                    localStorage.setItem('cl_v5_accs', JSON.stringify(accs));
-                    alert(`CỘNG ${config.reward} XU THÀNH CÔNG!`);
-                    window.location.href = window.location.origin + window.location.pathname;
+        function changeLanguage() {
+            currentLang = document.getElementById('langSelect').value;
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.getAttribute('data-lang');
+                if (translations[currentLang][key]) {
+                    el.innerText = translations[currentLang][key];
                 }
+            });
+        }
+
+        function openNotice() {
+            authScreen.style.opacity = '0';
+            setTimeout(() => {
+                authScreen.style.display = 'none';
+                noticeModal.style.display = 'flex';
+                setTimeout(() => noticeModal.classList.add('show'), 10);
+            }, 500);
+        }
+
+        function enterMain() {
+            noticeModal.classList.add('closing');
+            audio.play().catch(() => {});
+            setTimeout(() => {
+                noticeModal.style.display = 'none';
+                mainContent.style.display = 'flex';
+                setTimeout(() => mainContent.classList.add('show'), 50);
+            }, 400);
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function updateTime() {
+            const now = new Date();
+            
+            // Cập nhật Giờ:Phút:Giây
+            document.getElementById('realTime').innerText = 
+                now.getHours().toString().padStart(2,'0') + ":" + 
+                now.getMinutes().toString().padStart(2,'0') + ":" + 
+                now.getSeconds().toString().padStart(2,'0');
+
+            // Cập nhật Ngày/Tháng/Năm
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            document.getElementById('realDate').innerText = now.toLocaleDateString('vi-VN', options);
+        }
+        setInterval(updateTime, 1000);
+
+        function createLixi() {
+            const c = document.getElementById('lixiBox');
+            if (c.childElementCount > 15) return; // Chống lag
+
+            const l = document.createElement('div');
+            l.className = 'lixi';
+            // Dùng icon tờ tiền xanh
+            l.innerHTML = '<i class="fas fa-money-bill-wave"></i>'; 
+            
+            l.style.left = Math.random() * 98 + "vw";
+            l.style.fontSize = (Math.random() * 10 + 15) + "px"; // Kích thước ngẫu nhiên
+            l.style.animationDuration = (Math.random() * 2 + 3) + "s";
+            
+            c.appendChild(l);
+            setTimeout(() => l.remove(), 5000);
+        }
+        setInterval(createLixi, 800); // Tốc độ rơi vừa phải
+
+        let currentSelected = "";
+        let targetUrl = "";
+        const gameLinks = { 
+            "FC MOBILE": "https://link4m.net/lHS34", 
+            "LIÊN QUÂN": "https://vuotnhanh.com/mgLY", 
+            "LIÊN QUÂN IOS": "https://vuotnhanh.com/dtpi", 
+            "8 BALL POOL": "https://vuotnhanh.com/V2u3",
+            "PUBG": "https://vuotnhanh.com/aOKr",
+            "PLAY TOGETHER": "https://vuotnhanh.com/aOKr"
+        }
+
+        function selectGame(el, name) {
+            document.querySelectorAll('.game-tag').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            currentSelected = name;
+            showToast(translations[currentLang].toast_select + name);
+        }
+
+        function closeConfirm() {
+            confirmModal.classList.add('closing');
+            setTimeout(() => {
+                confirmModal.classList.remove('show', 'closing');
+                confirmModal.style.display = 'none';
+                confirmContent.style.display = 'block';
+                redirectLoading.style.display = 'none';
+            }, 400);
+        }
+
+        function openConfirm(title, text, url) {
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-text').innerHTML = text;
+            targetUrl = url;
+            confirmModal.style.display = 'flex';
+            setTimeout(() => confirmModal.classList.add('show'), 10);
+
+            document.getElementById('confirm-yes-btn').onclick = function() {
+                confirmContent.style.display = 'none';
+                redirectLoading.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 1500);
+            };
+        }
+
+        function handleGetKey() {
+            if (!currentSelected) {
+                showToast(translations[currentLang].toast_warn_select);
+                return;
             }
+            openConfirm(
+                translations[currentLang].confirm_title, 
+                `${translations[currentLang].conf_get_key_desc} <b style="color:var(--primary)">${currentSelected}</b>?`, 
+                gameLinks[currentSelected]
+            );
         }
 
-        function handleWd() {
-            const bank = document.getElementById('wd-bank').value.trim();
-            const stk = document.getElementById('wd-stk').value.trim();
-            const name = document.getElementById('wd-name').value.trim();
-            const amount = parseInt(document.getElementById('wd-amount').value);
-
-            if(!bank || !stk || !name || isNaN(amount)) return alert("Vui lòng nhập đủ thông tin ngân hàng!");
-            if(amount < 100000) return alert("Rút tối thiểu 100,000 Xu!");
-            if(amount > data.balance) return alert("Số dư không đủ!");
-
-            data.balance -= amount;
-            save(); updateUI();
-            alert(`LỆNH RÚT TIỀN ĐÃ GỬI!\nNgân hàng: ${bank}\nSTK: ${stk}\nTên: ${name}\nSố tiền: ${amount.toLocaleString()} Xu.`);
-        }
-
-        function updateUI() {
-            document.getElementById('txt-balance').innerText = data.balance.toLocaleString();
-            document.getElementById('txt-main-balance').innerText = data.balance.toLocaleString();
-            document.getElementById('txt-today-tasks').innerText = data.today;
-            document.getElementById('txt-total-earned').innerText = data.earned.toLocaleString();
-            document.getElementById('txt-user').innerText = currentUser.toUpperCase();
-        }
-
-        function renderTasks() {
-            const container = document.getElementById('task-list');
-            container.innerHTML = TASKS.map(t => {
-                const done = data.counts[t.id] || 0;
-                const isMax = done >= t.limit;
-                return `
-                <div class="bg-white p-6 rounded-[35px] shadow-sm border border-gray-100 flex justify-between items-center ${isMax ? 'opacity-40 grayscale' : ''}">
-                    <div>
-                        <h4 class="font-black text-[13px] uppercase text-gray-900 italic tracking-tighter">${t.name}</h4>
-                        <p class="text-[9px] font-black text-gray-400 mt-1 uppercase">Thưởng: <span class="text-green-500">+${t.reward}</span> • Lượt: ${t.limit - done}/${t.limit}</p>
-                    </div>
-                    <button onclick="${isMax ? '' : `goTask('${t.id}')`}" class="btn-active ${isMax ? 'bg-gray-100 text-gray-400' : 'bg-blue-700 text-white shadow-xl shadow-blue-100'} px-6 py-4 rounded-2xl text-[10px] font-black uppercase">
-                        ${isMax ? 'Hết lượt' : 'Vượt link'}
-                    </button>
-                </div>`;
-            }).join('');
-        }
-
-        function goTask(id) {
-            const task = TASKS.find(t => t.id === id);
-            if(confirm(`XÁC NHẬN:\nSau khi vượt link xong hãy đợi hệ thống tự chuyển hướng về để nhận thưởng.`)) {
-                window.location.href = task.url;
-            }
-        }
-
-        function save() {
-            let accs = JSON.parse(localStorage.getItem('cl_v5_accs')) || {};
-            accs[currentUser] = data;
-            localStorage.setItem('cl_v5_accs', JSON.stringify(accs));
-        }
-
-        function switchAuth(m) {
-            window.authMode = m;
-            document.getElementById('btn-login').className = m === 'login' ? "w-1/2 py-3.5 rounded-xl font-black text-[11px] uppercase bg-white shadow-md text-blue-700" : "w-1/2 py-3.5 rounded-xl font-black text-[11px] uppercase text-gray-400";
-            document.getElementById('btn-reg').className = m === 'reg' ? "w-1/2 py-3.5 rounded-xl font-black text-[11px] uppercase bg-white shadow-md text-blue-700" : "w-1/2 py-3.5 rounded-xl font-black text-[11px] uppercase text-gray-400";
-        }
-
-        function switchTab(name, el) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('tab-active'));
-            document.getElementById('tab-' + name).classList.add('tab-active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active', 'text-blue-700'));
-            el.classList.add('active', 'text-blue-700');
-        }
-
-        function checkDailyReset() {
-            const today = new Date().toLocaleDateString('vi-VN');
-            const last = localStorage.getItem('last_reset_' + currentUser);
-            if(last !== today) {
-                data.counts = {};
-                data.today = 0;
-                localStorage.setItem('last_reset_' + currentUser, today);
-                save();
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('user');
-            location.reload();
+        function handleDownload(name, url) {
+            openConfirm(
+                translations[currentLang].confirm_title, 
+                `${translations[currentLang].conf_dl_desc} <b style="color:var(--primary)">${name}</b>?`, 
+                url
+            );
         }
     </script>
 </body>
