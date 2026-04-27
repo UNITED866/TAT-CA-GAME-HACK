@@ -7,6 +7,54 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@900&display=swap" rel="stylesheet">
     <style>
+/* Style cho khung ghi chú PUBG */
+.pubg-note-box {
+    background: rgba(255, 165, 0, 0.1);
+    border-left: 4px solid #ffcc00;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    text-align: left;
+}
+.pubg-note-box i {
+    color: #ffcc00;
+    margin-right: 8px;
+}
+.pubg-note-text {
+    font-size: 11px;
+    color: #eee;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+/* Style cho Menu chọn tải PUBG */
+.pubg-menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+.btn-sub-dl {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.btn-sub-dl:active {
+    background: var(--primary);
+    color: #000;
+}
+.menu-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 5px 0;
+}
+
 /* Nut Kiem Tien Vang Gold */
 .btn-money {
     width: 100%;
@@ -333,9 +381,9 @@
                         <div class="dl-name"><i class="fas fa-shield-alt"></i> LIÊN QUÂN IOS</div>
                         <span class="dl-badge">IOS</span>
                     </div>
-                    <div class="dl-card" onclick="handleDownload('PUBG MOBILE - VNG & QT', 'https://vuotnhanh.com/CrHr')">
+                    <div class="dl-card" onclick="handlePubgMenu()">
                         <div class="dl-name"><i class="fas fa-crosshairs"></i> PUBG MOBILE</div>
-                        <span class="dl-badge">VNG</span>
+                        <span class="dl-badge">VNG / QT / JAVA</span>
                     </div>
                     <div class="dl-card" onclick="handleDownload('PLAY TOGETHER', 'https://vuotnhanh.com/UDUP')">
                         <div class="dl-name"><i class="fas fa-home"></i> PLAY TOGETHER</div>
@@ -366,6 +414,54 @@
     </div>
 
     <script>
+function handlePubgMenu() {
+    const title = "CHỌN PHIÊN BẢN PUBG";
+    
+    // Thêm nội dung Note vào trên cùng của MenuHtml
+    const menuHtml = `
+        <div class="pubg-note-box">
+            <div class="pubg-note-text">
+                <i class="fas fa-exclamation-triangle"></i> <b>LƯU Ý QUAN TRỌNG:</b><br>
+                1. Đăng nhập bằng tài khoản Facebook nhé (chú ý phải xoá ứng dụng Facebook trước).<br>
+                2. Còn anh em nào đăng nhập tài khoản Google thì phải quét QR</b>.<br>
+            </div>
+        </div>
+
+        <div class="pubg-menu-container">
+            <a href="https://link4m.net/IryZH0" class="btn-sub-dl"><i class="fas fa-download"></i> TẢI PUBG MOBILE 4.3</a>
+            <a href="https://link4m.net/TYiHCAv" class="btn-sub-dl"><i class="fas fa-file-archive"></i> TẢI OBB PUBG</a>
+            
+            <hr class="menu-divider">
+            
+            <a href="https://link4m.net/YCfb5z" class="btn-sub-dl"><i class="fas fa-download"></i> TẢI PUBG JAVA 4.3</a>
+            <a href="https://link4m.net/TYiHCAv" class="btn-sub-dl"><i class="fas fa-file-archive"></i> TẢI OBB JAVA</a>
+ 
+            <hr class="menu-divider">
+       
+            <a href="https://link4m.com/IrziWu" class="btn-sub-dl"><i class="fas fa-download"></i> TẢI PUBG GLOBAL 4.3</a>
+            <a href="https://link4m.net/tSqkbPN" class="btn-sub-dl"><i class="fas fa-file-archive"></i> TẢI OBB GLOBAL</a>
+
+        </div>
+    `;
+
+    document.getElementById('confirm-title').innerText = title;
+    document.getElementById('confirm-text').innerHTML = menuHtml;
+    document.getElementById('confirm-yes-btn').style.display = 'none';
+    
+    const modal = document.getElementById('confirm-modal');
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+}
+
+// Chỉnh sửa lại hàm closeConfirm cũ để nó hiện lại nút "Đồng ý" cho các game khác
+const originalCloseConfirm = closeConfirm;
+closeConfirm = function() {
+    originalCloseConfirm();
+    setTimeout(() => {
+        document.getElementById('confirm-yes-btn').style.display = 'block';
+    }, 400);
+}
+
 function handleBuyFCIOS() {
             // Nội dung bảng giá - Đã xóa dấu và in hoa theo ý bạn
             const title = "BANG GIA HACK FC IOS";
@@ -525,7 +621,7 @@ function handleBuyFCIOS() {
             "LIÊN QUÂN": "https://vuotnhanh.com/mgLY", 
             "LIÊN QUÂN IOS": "https://vuotnhanh.com/dtpi", 
             "8 BALL POOL": "https://vuotnhanh.com/V2u3",
-            "PUBG": "https://vuotnhanh.com/aOKr",
+            "PUBG": "https://link4m.net/veWIP",
             "PLAY TOGETHER": "https://vuotnhanh.com/aOKr"
         }
 
