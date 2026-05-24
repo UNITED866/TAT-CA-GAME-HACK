@@ -5,6 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VUA GAME MODS</title>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCM2AhA51qQjQeSdFFFltzq0bjDX1h10E8",
+  authDomain: "vhmods-f5253.firebaseapp.com",
+  databaseURL: "https://vhmods-f5253-default-rtdb.firebaseio.com",
+  projectId: "vhmods-f5253",
+  storageBucket: "vhmods-f5253.firebasestorage.app",
+  messagingSenderId: "767319141481",
+  appId: "1:767319141481:web:ea4b5a3f78999c1348c6f8"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const LINKS_REF = db.ref('vhmods/links');
+function loadFirebaseLinks() {
+  LINKS_REF.on('value', snap => {
+    const data = snap.val();
+    if (!data) return;
+    if (data.gameLinks) Object.assign(gameLinks, data.gameLinks);
+    window._links = data;
+  });
+}
+function saveToFirebase(data) { return LINKS_REF.set(data); }
+</script>
 <style>
 :root{--p:#7dd3fc;--ps:#38bdf8;--s:#a78bfa;--a:#fb7185;--g:#fbbf24;--gr:#4ade80;--bg:#0a0f1e;--sf:rgba(255,255,255,0.04);--sf2:rgba(255,255,255,0.07);--bd:rgba(125,211,252,0.15);--bd2:rgba(255,255,255,0.08);--t:#e2e8f0;--tm:#64748b;--ts:#94a3b8}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
@@ -810,8 +835,7 @@ const LINK_KEYS = {
 };
 
 function admLoadLinks() {
-  // Key links
-  const saved = JSON.parse(localStorage.getItem('vhmods_links') || '{}');
+  const saved = window._links || {};
   document.getElementById('al-fc').value     = gameLinks['FC MOBILE'] || '';
   document.getElementById('al-lq').value     = gameLinks['LIÊN QUÂN'] || '';
   document.getElementById('al-lqios').value  = gameLinks['LIÊN QUÂN IOS'] || '';
@@ -863,21 +887,21 @@ function admSave() {
     'tg':          v('al-tg'),
   };
   localStorage.setItem('vhmods_links', JSON.stringify(data));
+  window._links = data;
 
-  // Show saved toast
-  const t = document.getElementById('adm-saved');
-  t.style.display = 'flex';
-  setTimeout(() => { t.style.display = 'none'; }, 2500);
-}
+  // Save lên Firebase → tất cả user thấy ngay
+  saveToFirebase(data).then(() => {
+    const t = document.getElementById('adm-saved');
+    t.style.display = 'flex';
+    t.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Đã lưu Firebase! Tất cả user thấy ngay.`;
+    setTimeout(() => { t.style.display = 'none'; }, 3000);
+  }).catch(err => {
+    alert('Lỗi Firebase: ' + err.message);
+  });
 
-// Load saved links on startup
+// Load links từ Firebase (realtime, tất cả user đều nhận)
 function loadSavedLinks() {
-  try {
-    const saved = JSON.parse(localStorage.getItem('vhmods_links') || '{}');
-    if (saved.gameLinks) Object.assign(gameLinks, saved.gameLinks);
-    // Inject into doFC, doLQ, doPubg will read from saved automatically via closures below
-    window._links = saved;
-  } catch(e) {}
+  loadFirebaseLinks();
 }
 loadSavedLinks();
 
