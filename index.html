@@ -24,7 +24,8 @@ function loadFirebaseLinks() {
   LINKS_REF.on('value', snap => {
     const data = snap.val();
     if (!data) return;
-    if (data.gameLinks) Object.assign(gameLinks, data.gameLinks);
+    // gameLinks đã được khai báo ở dưới, dùng window để an toàn
+    if (data.gameLinks && window.gameLinks) Object.assign(window.gameLinks, data.gameLinks);
     window._links = data;
   });
 }
@@ -624,11 +625,12 @@ function openConfirm(title, html, url, btnLabel, onYes) {
 }
 
 // GAME SELECT
-const gameLinks = {
+window.gameLinks = {
   'FC MOBILE':'https://vuotnhanh.com/JACR','LIÊN QUÂN':'https://vuotnhanh.com/Q1lq',
   'LIÊN QUÂN IOS':'https://vuotnhanh.com/dtpi','8 BALL POOL':'https://link4m.net/RXHNlx',
   'PUBG':'https://link4m.org/d2mbjiPC','PLAY TOGETHER':'https://vuotnhanh.com/aOKr'
 };
+const gameLinks = window.gameLinks;
 
 function selGame(el, name) {
   document.querySelectorAll('.gtag').forEach(t => t.classList.remove('active'));
