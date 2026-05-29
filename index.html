@@ -353,9 +353,9 @@ footer b{color:var(--ts)}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
           PUBG
         </div>
-        <div class="gtag" onclick="selGame(this,'PLAY TOGETHER')">
+        <div class="gtag" onclick="selGame(this,'CROSSFIRE')">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          PLAY TOGETHER
+          CROSSFIRE
         </div>
       </div>
 
@@ -413,11 +413,11 @@ footer b{color:var(--ts)}
           </div>
           <span class="dbadge">VN / QT</span>
         </div>
-        <!-- PLAY TOGETHER -->
-        <div class="dcard" onclick="doDL('PLAY TOGETHER','https://vuotnhanh.com/UDUP')">
+        <!-- CROSSFIRE -->
+        <div class="dcard" onclick="doDL('CROSSFIRE','https://vuotnhanh.com/UDUP')">
           <div class="dname">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            PLAY TOGETHER
+            CROSSFIRE
           </div>
           <span class="dbadge">VNG</span>
         </div>
@@ -628,7 +628,7 @@ function openConfirm(title, html, url, btnLabel, onYes) {
 window.gameLinks = {
   'FC MOBILE':'https://vuotnhanh.com/JACR','LIÊN QUÂN':'https://vuotnhanh.com/Q1lq',
   'LIÊN QUÂN IOS':'https://vuotnhanh.com/dtpi','8 BALL POOL':'https://link4m.net/RXHNlx',
-  'PUBG':'https://link4m.org/d2mbjiPC','PLAY TOGETHER':'https://vuotnhanh.com/aOKr'
+  'PUBG':'https://link4m.org/d2mbjiPC','CROSSFIRE':'https://vuotnhanh.com/aOKr'
 };
 const gameLinks = window.gameLinks;
 
@@ -833,7 +833,7 @@ const LINK_KEYS = {
   'al-lqios':  {obj:'gameLinks', key:'LIÊN QUÂN IOS'},
   'al-8b':     {obj:'gameLinks', key:'8 BALL POOL'},
   'al-pubg':   {obj:'gameLinks', key:'PUBG'},
-  'al-pt':     {obj:'gameLinks', key:'PLAY TOGETHER'},
+  'al-pt':     {obj:'gameLinks', key:'CROSSFIRE'},
 };
 
 function admLoadLinks() {
@@ -843,7 +843,7 @@ function admLoadLinks() {
   document.getElementById('al-lqios').value  = gameLinks['LIÊN QUÂN IOS'] || '';
   document.getElementById('al-8b').value     = gameLinks['8 BALL POOL'] || '';
   document.getElementById('al-pubg').value   = gameLinks['PUBG'] || '';
-  document.getElementById('al-pt').value     = gameLinks['PLAY TOGETHER'] || '';
+  document.getElementById('al-pt').value     = gameLinks['CROSSFIRE'] || '';
   // FC download
   document.getElementById('al-fc-qt').value    = saved['fc-qt'] || '';
   document.getElementById('al-fc-vn').value    = saved['fc-vn'] || '';
@@ -870,7 +870,7 @@ function admSave() {
   if (v('al-lqios'))  gameLinks['LIÊN QUÂN IOS'] = v('al-lqios');
   if (v('al-8b'))     gameLinks['8 BALL POOL']   = v('al-8b');
   if (v('al-pubg'))   gameLinks['PUBG']          = v('al-pubg');
-  if (v('al-pt'))     gameLinks['PLAY TOGETHER'] = v('al-pt');
+  if (v('al-pt'))     gameLinks['CROSSFIRE'] = v('al-pt');
 
   // Save all to localStorage
   const data = {
@@ -1011,7 +1011,7 @@ function doPubg() {
       <div class="adm-row"><span class="adm-lbl">LIÊN QUÂN IOS</span><input class="adm-inp" id="al-lqios" placeholder="https://..."></div>
       <div class="adm-row"><span class="adm-lbl">8 BALL POOL</span><input class="adm-inp" id="al-8b" placeholder="https://..."></div>
       <div class="adm-row"><span class="adm-lbl">PUBG</span><input class="adm-inp" id="al-pubg" placeholder="https://..."></div>
-      <div class="adm-row"><span class="adm-lbl">PLAY TOGETHER</span><input class="adm-inp" id="al-pt" placeholder="https://..."></div>
+      <div class="adm-row"><span class="adm-lbl">CROSSFIRE</span><input class="adm-inp" id="al-pt" placeholder="https://..."></div>
     </div>
 
     <!-- FC DOWNLOAD -->
@@ -1053,7 +1053,7 @@ function doPubg() {
         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
         KHÁC
       </div>
-      <div class="adm-row"><span class="adm-lbl">PLAY TOGETHER</span><input class="adm-inp" id="al-pt-dl" placeholder="https://..."></div>
+      <div class="adm-row"><span class="adm-lbl">CROSSFIRE</span><input class="adm-inp" id="al-pt-dl" placeholder="https://..."></div>
       <div class="adm-row"><span class="adm-lbl">8 BALL POOL</span><input class="adm-inp" id="al-8b-dl" placeholder="https://..."></div>
       <div class="adm-row"><span class="adm-lbl">Telegram Admin (mua key/ios)</span><input class="adm-inp" id="al-tg" placeholder="https://t.me/..."></div>
     </div>
