@@ -372,6 +372,10 @@ footer b{color:var(--ts)}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           CROSSFIRE
         </div>
+        <div class="gtag" onclick="selGame(this,'BLOOD STRIKE')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/><circle cx="12" cy="12" r="3"/></svg>
+          BLOOD STRIKE
+        </div>
       </div>
 
       <button class="bprem" onclick="doGetKey()">
@@ -443,6 +447,14 @@ footer b{color:var(--ts)}
             8 BALL POOL
           </div>
           <span class="dbadge">VIP</span>
+        </div>
+        <!-- BLOOD STRIKE -->
+        <div class="dcard" onclick="doDL('BLOOD STRIKE','https://vuotnhanh.com/bloodstrike')">
+          <div class="dname">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/><circle cx="12" cy="12" r="3"/></svg>
+            BLOOD STRIKE
+          </div>
+          <span class="dbadge">MOD</span>
         </div>
       </div>
     </div>
@@ -644,7 +656,8 @@ function openConfirm(title, html, url, btnLabel, onYes) {
 window.gameLinks = {
   'FC MOBILE':'https://vuotnhanh.com/JACR','LIÊN QUÂN':'https://vuotnhanh.com/Q1lq',
   'LIÊN QUÂN IOS':'https://vuotnhanh.com/dtpi','8 BALL POOL':'https://link4m.net/RXHNlx',
-  'PUBG':'https://link4m.org/d2mbjiPC','CROSSFIRE':'https://vuotnhanh.com/aOKr'
+  'PUBG':'https://link4m.org/d2mbjiPC','CROSSFIRE':'https://vuotnhanh.com/aOKr',
+  'BLOOD STRIKE':'https://vuotnhanh.com/bloodstrike'
 };
 const gameLinks = window.gameLinks;
 
@@ -850,6 +863,7 @@ const LINK_KEYS = {
   'al-8b':     {obj:'gameLinks', key:'8 BALL POOL'},
   'al-pubg':   {obj:'gameLinks', key:'PUBG'},
   'al-pt':     {obj:'gameLinks', key:'CROSSFIRE'},
+  'al-bs':     {obj:'gameLinks', key:'BLOOD STRIKE'},
 };
 
 function admLoadLinks() {
@@ -860,6 +874,8 @@ function admLoadLinks() {
   document.getElementById('al-8b').value     = gameLinks['8 BALL POOL'] || '';
   document.getElementById('al-pubg').value   = gameLinks['PUBG'] || '';
   document.getElementById('al-pt').value     = gameLinks['CROSSFIRE'] || '';
+  document.getElementById('al-bs').value     = gameLinks['BLOOD STRIKE'] || '';
+  document.getElementById('al-bs-dl').value  = saved['bs-dl'] || '';
   // FC download
   document.getElementById('al-fc-qt').value    = saved['fc-qt'] || '';
   document.getElementById('al-fc-vn').value    = saved['fc-vn'] || '';
@@ -886,7 +902,8 @@ function admSave() {
   if (v('al-lqios'))  gameLinks['LIÊN QUÂN IOS'] = v('al-lqios');
   if (v('al-8b'))     gameLinks['8 BALL POOL']   = v('al-8b');
   if (v('al-pubg'))   gameLinks['PUBG']          = v('al-pubg');
-  if (v('al-pt'))     gameLinks['CROSSFIRE'] = v('al-pt');
+  if (v('al-pt'))     gameLinks['CROSSFIRE']    = v('al-pt');
+  if (v('al-bs'))     gameLinks['BLOOD STRIKE'] = v('al-bs');
 
   // Save all to localStorage
   const data = {
@@ -902,6 +919,7 @@ function admSave() {
     'pubg-obb-qt': v('al-pubg-obb-qt'),
     'pt-dl':       v('al-pt-dl'),
     '8b-dl':       v('al-8b-dl'),
+    'bs-dl':       v('al-bs-dl'),
     'tg':          v('al-tg'),
   };
   localStorage.setItem('vhmods_links', JSON.stringify(data));
@@ -1028,6 +1046,16 @@ function doPubg() {
       <div class="adm-row"><span class="adm-lbl">8 BALL POOL</span><input class="adm-inp" id="al-8b" placeholder="https://..."></div>
       <div class="adm-row"><span class="adm-lbl">PUBG</span><input class="adm-inp" id="al-pubg" placeholder="https://..."></div>
       <div class="adm-row"><span class="adm-lbl">CROSSFIRE</span><input class="adm-inp" id="al-pt" placeholder="https://..."></div>
+      <div class="adm-row"><span class="adm-lbl">BLOOD STRIKE</span><input class="adm-inp" id="al-bs" placeholder="https://..."></div>
+    </div>
+
+    <!-- BLOOD STRIKE DOWNLOAD -->
+    <div class="adm-section">
+      <div class="adm-sec-hdr">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+        BLOOD STRIKE — TẢI
+      </div>
+      <div class="adm-row"><span class="adm-lbl">Link tải</span><input class="adm-inp" id="al-bs-dl" placeholder="https://..."></div>
     </div>
 
     <!-- FC DOWNLOAD -->
