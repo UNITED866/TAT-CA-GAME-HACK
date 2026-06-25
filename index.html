@@ -1,308 +1,1031 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Web Đang Cập Nhật</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;800&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:       #0a0e1a;
-      --surface:  #111827;
-      --border:   #1e2d45;
-      --tg-blue:  #29a8e2;
-      --tg-light: #5bc8f5;
-      --gold:     #f5c842;
-      --text:     #e8edf5;
-      --muted:    #6b7a99;
-      --glow:     rgba(41,168,226,0.18);
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a14">
+<title>🎮 KISS MODS</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCM2AhA51qQjQeSdFFFltzq0bjDX1h10E8",
+  authDomain: "vhmods-f5253.firebaseapp.com",
+  databaseURL: "https://vhmods-f5253-default-rtdb.firebaseio.com",
+  projectId: "vhmods-f5253",
+  storageBucket: "vhmods-f5253.firebasestorage.app",
+  messagingSenderId: "767319141481",
+  appId: "1:767319141481:web:ea4b5a3f78999c1348c6f8"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const LINKS_REF = db.ref('vhmods/links');
+function loadFirebaseLinks() {
+  LINKS_REF.on('value', snap => {
+    const data = snap.val();
+    if (!data) return;
+    const admOverlay = document.getElementById('adm-overlay');
+    if (admOverlay && admOverlay.classList.contains('open')) return;
+    if (data.gameLinks && window.gameLinks) {
+      for (const id in data.gameLinks) {
+        // CHỈ update game có sẵn trong code, KHÔNG thêm game lạ từ Firebase
+        if (window.gameLinks[id]) {
+          const fb = data.gameLinks[id];
+          if (fb.img    !== undefined) window.gameLinks[id].img    = fb.img;
+          if (fb.key    !== undefined) window.gameLinks[id].key    = fb.key;
+          if (fb.dl     !== undefined) window.gameLinks[id].dl     = fb.dl;
+          if (fb.obb    !== undefined) window.gameLinks[id].obb    = fb.obb;
+          if (fb.status !== undefined) window.gameLinks[id].status = fb.status;
+        }
+      }
     }
+    window._links = data;
+    if (typeof renderGameGrid === 'function') renderGameGrid();
+  });
+}
+function saveToFirebase(data) { return LINKS_REF.set(data); }
+</script>
+<style>
+:root{--p:#a78bfa;--ps:#8b5cf6;--s:#fbbf24;--a:#f97316;--g:#fbbf24;--gr:#4ade80;--bg:#0a0a14;--sf:rgba(255,255,255,0.04);--sf2:rgba(255,255,255,0.07);--bd:rgba(167,139,250,0.2);--bd2:rgba(255,255,255,0.08);--t:#e2e8f0;--tm:#64748b;--ts:#94a3b8}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html{height:100%;width:100%;background:#0a0a14}
+body{font-family:'Lexend',sans-serif;background:var(--bg);color:var(--t);width:100%;min-height:100vh;min-height:100dvh;overflow:hidden;position:fixed;inset:0}
+.bg-mesh{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(96,165,250,0.10),transparent 60%),radial-gradient(ellipse 60% 50% at 80% 80%,rgba(167,139,250,0.10),transparent 60%),linear-gradient(160deg,#0a0a14,#13102a 50%,#0a0a14)}
+/* subtle dot pattern overlay */
+.bg-mesh::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(167,139,250,0.05) 1px,transparent 1px);background-size:26px 26px;pointer-events:none}
+.orb{position:fixed;border-radius:50%;filter:blur(70px);opacity:.22;pointer-events:none;z-index:0;will-change:transform}
+.orb1{width:280px;height:280px;background:var(--p);top:-70px;left:-70px;animation:o1 14s ease-in-out infinite}
+.orb2{width:220px;height:220px;background:#60a5fa;bottom:-50px;right:-50px;animation:o2 17s ease-in-out infinite}
+.orb3{width:160px;height:160px;background:#7c3aed;top:45%;left:60%;animation:o3 11s ease-in-out infinite}
+@keyframes o1{0%,100%{transform:translate(0,0)}50%{transform:translate(25px,18px)}}
+@keyframes o2{0%,100%{transform:translate(0,0)}50%{transform:translate(-18px,-25px)}}
+@keyframes o3{0%,100%{transform:translate(0,0)}50%{transform:translate(-12px,16px)}}
 
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      font-family: 'Be Vietnam Pro', sans-serif;
-      color: var(--text);
-      overflow-x: hidden;
-    }
+/* LANG - góc phải */
+.lang-box{position:fixed;top:14px;right:14px;z-index:100001;background:rgba(7,26,14,.92);border:1px solid var(--bd);padding:6px 14px;border-radius:20px;display:flex;align-items:center;gap:7px}
+.lang-box select{background:transparent;color:var(--p);border:none;outline:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'Lexend',sans-serif}
+.lang-box select option{background:#071a0e}
 
-    /* Starfield */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0;
-      background-image:
-        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55) 0%, transparent 100%),
-        radial-gradient(1px 1px at 34% 72%, rgba(255,255,255,.40) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 55% 30%, rgba(255,255,255,.35) 0%, transparent 100%),
-        radial-gradient(1px 1px at 76% 60%, rgba(255,255,255,.50) 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 15%, rgba(255,255,255,.45) 0%, transparent 100%),
-        radial-gradient(1px 1px at 8%  85%, rgba(255,255,255,.30) 0%, transparent 100%),
-        radial-gradient(1px 1px at 65% 88%, rgba(255,255,255,.40) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 48% 50%, rgba(255,255,255,.25) 0%, transparent 100%);
-      pointer-events: none;
-    }
+/* TOAST - góc TRÁI */
+#toast{position:fixed;top:16px;left:-400px;background:rgba(7,26,14,.97);border:1px solid var(--bd);padding:11px 18px;border-radius:16px;display:flex;align-items:center;gap:9px;z-index:100000;transition:left .45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 32px rgba(0,0,0,.4);font-size:12px;font-weight:600;max-width:75vw}
+#toast.show{left:16px}
+#toast svg{flex-shrink:0}
 
-    /* Blue aurora top */
-    body::after {
-      content: '';
-      position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
-      width: 800px; height: 400px;
-      background: radial-gradient(ellipse at center, rgba(41,168,226,.22) 0%, transparent 70%);
-      z-index: 0;
-      pointer-events: none;
-      animation: pulse-glow 4s ease-in-out infinite;
-    }
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0);display:none;justify-content:center;align-items:center;z-index:20000;transition:background .3s ease}
+.overlay.show{background:rgba(0,0,0,.85)}
+.mcard{background:rgba(5,18,10,.98);border:1px solid var(--bd);width:92%;max-width:380px;border-radius:28px;padding:26px;text-align:center;transform:translateY(24px) scale(.96);opacity:0;transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s ease;box-shadow:0 24px 80px rgba(0,0,0,.55);will-change:transform,opacity;max-height:88vh;overflow-y:auto}
+.mcard::-webkit-scrollbar{width:0}
+.overlay.show .mcard{transform:translateY(0) scale(1);opacity:1}
+.overlay.closing .mcard{transform:translateY(18px) scale(.96);opacity:0;transition:transform .3s ease,opacity .25s ease}
 
-    @keyframes pulse-glow {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.55; }
-    }
+/* SPINNER */
+.spin{width:44px;height:44px;border:3px solid rgba(125,211,252,.1);border-top:3px solid var(--p);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 16px;will-change:transform}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-    /* ── Layout ── */
-    .page {
-      position: relative; z-index: 1;
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 40px 20px;
-      gap: 0;
-    }
+/* AUTH */
+#auth{position:fixed;inset:0;background:var(--bg);display:flex;justify-content:center;align-items:center;z-index:10000;transition:opacity .5s ease}
+.auth-wrap{text-align:center;padding:24px}
+/* World Cup trophy / ball icon container */
+.auth-logo{width:110px;height:110px;margin:0 auto 24px;border-radius:50%;background:linear-gradient(135deg,rgba(34,197,94,.22),rgba(251,191,36,.22));border:2px solid rgba(74,222,128,.35);padding:4px;animation:lf 4s ease-in-out infinite;box-shadow:0 0 50px rgba(74,222,128,.18),0 0 100px rgba(251,191,36,.08),0 20px 40px rgba(0,0,0,.4);will-change:transform;position:relative}
+.auth-logo::before{content:'⚽';position:absolute;top:-14px;right:-10px;font-size:22px;animation:spin 6s linear infinite}
+.auth-logo::after{content:'🏆';position:absolute;bottom:-14px;left:-10px;font-size:20px;animation:lf2 3s ease-in-out infinite}
+.auth-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+@keyframes lf{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes lf2{0%,100%{transform:translateY(0) rotate(-10deg)}50%{transform:translateY(-8px) rotate(10deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* World Cup gradient title */
+.gb{font-size:28px;font-weight:900;letter-spacing:5px;background:linear-gradient(90deg,#4ade80,#fbbf24,#4ade80);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shine 3s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+.auth-sub{font-size:10px;color:var(--ts);letter-spacing:3px;margin-top:5px;display:flex;align-items:center;justify-content:center;gap:4px}
+/* Country flags strip */
+.wc-flags{display:flex;justify-content:center;gap:6px;margin:10px 0 18px;font-size:18px;animation:flagScroll 8s linear infinite}
+@keyframes flagScroll{0%,100%{opacity:1}50%{opacity:.7}}
+.auth-desc{color:var(--tm);font-size:11px;margin:0 0 24px}
+.auth-btn-wrap{display:flex;justify-content:center;width:100%}
+.auth-btn{position:relative;background:linear-gradient(135deg,#16a34a,#22c55e,#fbbf24);color:#071a0e;border:none;padding:16px 44px;border-radius:100px;font-weight:900;font-size:14px;font-family:'Lexend',sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;letter-spacing:1.5px;will-change:transform;overflow:hidden;box-shadow:0 0 32px rgba(74,222,128,0.45),0 8px 24px rgba(0,0,0,0.3);animation:btnPulse 3s ease-in-out infinite}
+.auth-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent);border-radius:100px;pointer-events:none}
+.auth-btn::after{content:'';position:absolute;top:-50%;left:-60%;width:35%;height:200%;background:rgba(255,255,255,0.22);transform:skewX(-20deg);animation:btnShine 3s ease-in-out infinite;pointer-events:none}
+@keyframes btnPulse{0%,100%{box-shadow:0 0 32px rgba(74,222,128,0.4),0 8px 24px rgba(0,0,0,0.3)}50%{box-shadow:0 0 60px rgba(74,222,128,0.65),0 10px 32px rgba(251,191,36,0.2)}}
+@keyframes btnShine{0%{left:-60%}55%,100%{left:130%}}
+.auth-btn:active{transform:scale(0.96)}
+.auth-btn svg{width:16px;height:16px;flex-shrink:0}
 
-    /* ── Card ── */
-    .card {
-      width: 100%; max-width: 520px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 52px 44px 44px;
-      text-align: center;
-      position: relative;
-      box-shadow:
-        0 0 0 1px rgba(41,168,226,.08),
-        0 20px 60px rgba(0,0,0,.55),
-        0 0 80px var(--glow);
-    }
+/* NOTICE */
+.ntag{display:inline-flex;align-items:center;gap:8px;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:var(--s);padding:7px 16px;border-radius:20px;font-size:11px;font-weight:800;margin-bottom:18px;text-transform:uppercase}
+.rtime{font-weight:800;font-size:13px;color:var(--p);margin-bottom:10px}
+.ndesc{font-size:12px;color:var(--ts);line-height:1.7}
+.wbox{background:rgba(251,191,36,.07);border:1px dashed rgba(251,191,36,.35);border-radius:16px;padding:14px;margin:18px 0;color:#fde68a;font-size:11px;font-weight:700;line-height:1.9}
 
-    /* top accent line */
-    .card::before {
-      content: '';
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 60%; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--tg-blue), var(--tg-light), var(--tg-blue), transparent);
-      border-radius: 0 0 4px 4px;
-    }
+/* MAIN */
+#main{display:none;height:100vh;height:100dvh;overflow-y:auto;flex-direction:column;align-items:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));z-index:10;transform:translateY(14px);opacity:0;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .6s ease;-webkit-overflow-scrolling:touch}
+#main::-webkit-scrollbar{width:0}
+#main.show{transform:translateY(0);opacity:1}
+.wrap{width:100%;max-width:440px}
 
-    /* ── Gear icon animation ── */
-    .gear-wrap {
-      width: 86px; height: 86px;
-      margin: 0 auto 28px;
-      position: relative;
-      display: flex; align-items: center; justify-content: center;
-    }
+#main.show .gc:nth-child(1){animation:fu .5s ease .05s both}
+#main.show .gc:nth-child(2){animation:fu .5s ease .15s both}
+#main.show .gc:nth-child(3){animation:fu .5s ease .25s both}
+#main.show .srow{animation:fu .5s ease .32s both}
+#main.show footer{animation:fu .5s ease .38s both}
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-    .gear-ring {
-      position: absolute; inset: 0;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      border-top-color: var(--tg-blue);
-      border-right-color: var(--tg-light);
-      animation: spin 2.4s linear infinite;
-    }
+/* CARDS */
+.gc{background:rgba(16,40,20,.7);border:1px solid rgba(74,222,128,.12);border-radius:24px;padding:22px;margin-bottom:14px}
+.ch{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:800;color:var(--p);margin-bottom:18px;text-transform:uppercase;letter-spacing:1.2px}
+.ch svg{width:14px;height:14px;flex-shrink:0}
 
-    .gear-ring-2 {
-      position: absolute; inset: 8px;
-      border-radius: 50%;
-      border: 1.5px solid transparent;
-      border-bottom-color: var(--gold);
-      border-left-color: rgba(245,200,66,.5);
-      animation: spin 3.6s linear infinite reverse;
-    }
+/* TIME */
+.tblock{text-align:center;margin-bottom:18px}
+.tpill{display:inline-block;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);color:var(--p);padding:10px 26px;border-radius:50px;font-size:22px;font-weight:900;letter-spacing:2px;font-variant-numeric:tabular-nums}
+.dtext{color:var(--tm);font-size:11px;font-weight:600;margin-top:8px;letter-spacing:1px}
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+/* INFO */
+.icard{background:rgba(16,40,20,.5);border:1px solid rgba(74,222,128,.1);border-radius:16px;padding:14px;margin-bottom:16px}
+.ih{font-size:10px;color:var(--p);font-weight:800;margin-bottom:10px;text-transform:uppercase;display:flex;align-items:center;gap:7px;letter-spacing:1px}
+.il{display:flex;justify-content:space-between;font-size:11px;margin-bottom:7px}
+.ilb{color:var(--tm);font-weight:600}
+.ilv{color:var(--t);font-weight:800}
 
-    .gear-icon {
-      font-size: 32px;
-      animation: gear-pulse 2.4s ease-in-out infinite;
-      line-height: 1;
-      user-select: none;
-    }
+/* GAME GRID */
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.gtag{background:rgba(16,40,20,.6);border:1px solid rgba(74,222,128,.1);padding:13px 8px;border-radius:16px;font-size:10px;font-weight:700;cursor:pointer;color:var(--tm);text-align:center;transition:all .22s ease;will-change:transform;text-transform:uppercase;letter-spacing:.5px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.gtag svg{width:18px;height:18px;opacity:.55;transition:opacity .2s}
+.gtag:active{transform:scale(.95)}
+.gtag.active{background:linear-gradient(135deg,rgba(34,197,94,.2),rgba(251,191,36,.15));border-color:var(--p);color:var(--p)}
+.gtag.active svg{opacity:1}
 
-    @keyframes gear-pulse {
-      0%, 100% { transform: scale(1) rotate(0deg); }
-      50%       { transform: scale(1.08) rotate(15deg); }
-    }
+/* BTN */
+.bprem{background:linear-gradient(135deg,#16a34a,#22c55e,#65a30d);color:#071a0e;border:none;padding:15px;border-radius:18px;font-weight:900;width:100%;cursor:pointer;font-size:13px;font-family:'Lexend',sans-serif;transition:all .22s ease;margin-bottom:10px;letter-spacing:.5px;will-change:transform;box-shadow:0 4px 20px rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;gap:8px}
+.bprem:active{transform:scale(.97)}
+.bprem svg{width:15px;height:15px;flex-shrink:0}
+.bout{background:rgba(16,40,20,.5);border:1px solid rgba(74,222,128,.15);color:var(--ts);padding:13px;border-radius:18px;width:100%;font-weight:700;cursor:pointer;font-size:12px;font-family:'Lexend',sans-serif;transition:all .22s ease;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px}
+.bout:active{transform:scale(.97)}
+.bout svg{width:14px;height:14px;flex-shrink:0}
+.bios{border-color:rgba(251,191,36,.3);color:var(--s)}
+.btxiu{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.28);color:var(--s);padding:13px;border-radius:18px;width:100%;font-weight:900;cursor:pointer;font-size:12px;font-family:'Lexend',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .22s ease;margin-bottom:10px}
+.btxiu:active{transform:scale(.97)}
+.btxiu svg{width:15px;height:15px;flex-shrink:0}
+.bcancel{background:rgba(16,40,20,.5);color:var(--ts);border:1px solid rgba(74,222,128,.1);padding:14px;border-radius:16px;flex:1;font-weight:700;cursor:pointer;font-family:'Lexend',sans-serif;font-size:12px;transition:all .2s ease}
+.bcancel:active{transform:scale(.97)}
+.bgrp{display:flex;gap:10px;margin-top:20px}
 
-    /* ── Status badge ── */
-    .badge {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: rgba(245,200,66,.1);
-      border: 1px solid rgba(245,200,66,.3);
-      color: var(--gold);
-      font-size: 11.5px; font-weight: 700;
-      letter-spacing: .12em; text-transform: uppercase;
-      padding: 5px 14px; border-radius: 100px;
-      margin-bottom: 22px;
-    }
+/* DL */
+.dlist{display:flex;flex-direction:column;gap:8px}
+.dcard{background:rgba(16,40,20,.5);border:1px solid rgba(74,222,128,.1);padding:13px 16px;border-radius:18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .22s ease;will-change:transform}
+.dcard:active{transform:scale(.98);border-color:var(--bd)}
+.dname{display:flex;align-items:center;gap:11px;color:var(--t);font-size:13px;font-weight:700}
+.dname svg{width:16px;height:16px;flex-shrink:0}
+.dbadge{font-size:9px;background:rgba(74,222,128,.08);color:var(--p);padding:4px 10px;border-radius:8px;font-weight:800;border:1px solid rgba(74,222,128,.2);letter-spacing:.5px;white-space:nowrap}
 
-    .badge-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--gold);
-      animation: blink 1.2s ease-in-out infinite;
-    }
+/* SOCIAL */
+.srow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.sbtn{background:rgba(16,40,20,.5);border:1px solid rgba(74,222,128,.18);padding:14px;border-radius:18px;text-decoration:none;color:var(--p);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .22s ease}
+.sbtn:active{transform:scale(.97);background:rgba(74,222,128,.12)}
+.sbtn svg{width:14px;height:14px;flex-shrink:0}
 
-    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:.2; } }
+/* PUBG */
+.pnbox{background:rgba(251,191,36,.07);border-left:3px solid var(--g);padding:12px 14px;margin-bottom:14px;border-radius:10px;text-align:left}
+.pntxt{font-size:11px;color:#cbd5e1;line-height:1.7;font-weight:600}
+.pmenu{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.bsub{background:rgba(16,40,20,.6);border:1px solid rgba(74,222,128,.12);color:var(--t);padding:12px 16px;border-radius:14px;font-size:12px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:8px;transition:all .2s ease;font-family:'Lexend',sans-serif}
+.bsub:active{background:rgba(74,222,128,.14);color:var(--p);border-color:var(--bd)}
+.bsub svg{width:13px;height:13px;flex-shrink:0;opacity:.7}
+.mdiv{border:none;border-top:1px solid rgba(74,222,128,.12);margin:4px 0}
 
-    /* ── Headline ── */
-    h1 {
-      font-size: clamp(22px, 5vw, 30px);
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 14px;
-      background: linear-gradient(135deg, #ffffff 30%, var(--tg-light));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+/* TXIU */
+.txwrap{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.22);border-radius:16px;padding:16px;margin:14px 0;text-align:left}
+.txwtitle{color:var(--s);font-size:12px;font-weight:900;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.txwtext{font-size:11px;color:var(--ts);line-height:1.8;font-weight:600}
+.txcbox{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.22);border-radius:14px;padding:14px;margin-top:12px;text-align:left}
+.txctitle{color:var(--a);font-size:11px;font-weight:900;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.txctext{font-size:11px;color:var(--ts);line-height:1.8;font-weight:600}
 
-    .subtitle {
-      font-size: 15px; font-weight: 400;
-      color: var(--muted);
-      line-height: 1.65;
-      margin-bottom: 36px;
-    }
+/* LIXI - bóng đá rơi thay vì đô la */
+#lbox{position:fixed;inset:0;pointer-events:none;z-index:99999}
+.lixi{position:absolute;top:-40px;animation:fall linear forwards;will-change:transform}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1}80%{opacity:.8}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
 
-    /* ── Divider ── */
-    .divider {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 28px;
-    }
+/* VERIFY */
+.vtick{color:var(--p);vertical-align:middle;display:inline-flex;align-items:center}
 
-    .divider span { flex: 1; height: 1px; background: var(--border); }
-    .divider em { font-size: 12px; color: var(--muted); font-style: normal; white-space: nowrap; }
+footer{text-align:center;padding:18px 0 28px;color:var(--tm);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+footer b{color:var(--ts)}
 
-    /* ── Telegram CTA ── */
-    .tg-btn {
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      width: 100%;
-      background: linear-gradient(135deg, #0f8fc7 0%, #29a8e2 60%, #5bc8f5 100%);
-      color: #fff;
-      font-family: 'Be Vietnam Pro', sans-serif;
-      font-size: 16px; font-weight: 700;
-      text-decoration: none;
-      padding: 17px 24px;
-      border-radius: 14px;
-      border: none; cursor: pointer;
-      position: relative; overflow: hidden;
-      transition: transform .15s, box-shadow .15s;
-      box-shadow: 0 8px 30px rgba(41,168,226,.35);
-      margin-bottom: 20px;
-    }
+/* World Cup banner strip in footer */
+.wc-banner{font-size:13px;letter-spacing:4px;margin-bottom:4px;opacity:.7}
 
-    .tg-btn::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, transparent 60%);
-      pointer-events: none;
-    }
+/* ── ADMIN ── */
+.adm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);backdrop-filter:blur(24px);display:none;justify-content:center;align-items:center;z-index:99999;padding:16px}
+.adm-overlay.open{display:flex}
+.adm-login-box{background:rgba(5,18,10,.99);border:1px solid rgba(74,222,128,.28);border-radius:28px;padding:28px;width:100%;max-width:320px;text-align:center}
+.adm-login-icon{color:var(--p);margin-bottom:14px}
+.adm-login-title{font-size:15px;font-weight:900;color:var(--t);margin-bottom:4px}
+.adm-login-sub{font-size:11px;color:var(--tm);margin-bottom:20px}
+.adm-pw-wrap{position:relative;margin-bottom:10px}
+.adm-pw{width:100%;background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.15);border-radius:14px;padding:13px 44px 13px 14px;color:var(--t);font-size:18px;font-family:'Lexend',sans-serif;font-weight:900;outline:none;letter-spacing:6px;transition:border-color .2s;text-align:center}
+.adm-pw:focus{border-color:var(--p)}
+.adm-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--ts);cursor:pointer;padding:4px;display:flex;align-items:center}
+.adm-login-btn{background:linear-gradient(135deg,#16a34a,#22c55e);color:#071a0e;border:none;padding:14px;border-radius:14px;width:100%;font-weight:900;font-size:13px;font-family:'Lexend',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .2s;margin-bottom:8px}
+.adm-login-btn:active{transform:scale(.97)}
+.adm-cls-btn{background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.1);color:var(--ts);padding:11px;border-radius:14px;width:100%;font-weight:700;font-size:12px;font-family:'Lexend',sans-serif;cursor:pointer;transition:transform .2s}
+.adm-cls-btn:active{transform:scale(.97)}
+.adm-err{color:var(--a);font-size:11px;font-weight:700;margin:0 0 10px;display:none}
+.adm-panel{background:rgba(5,18,10,.99);border:1px solid rgba(249,115,22,.25);border-radius:28px;padding:22px;width:100%;max-width:440px;max-height:88vh;overflow-y:auto}
+.adm-panel::-webkit-scrollbar{width:0}
+.adm-panel-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.adm-panel-title{font-size:13px;font-weight:900;color:var(--a);display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:1px}
+.adm-section{background:rgba(16,40,20,.4);border:1px solid rgba(74,222,128,.1);border-radius:16px;padding:14px;margin-bottom:10px}
+.adm-sec-hdr{font-size:10px;font-weight:900;color:var(--p);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(74,222,128,.1);padding-bottom:8px}
+.adm-row{margin-bottom:8px}
+.adm-game-block{border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 12px;margin-bottom:10px;background:rgba(255,255,255,.02)}
+.adm-game-block-name{font-size:11.5px;font-weight:800;color:#fff;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.adm-game-status-sel{font-size:10px;font-weight:700;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--ts);border-radius:8px;padding:3px 6px}
+.adm-game-block .adm-row{margin-bottom:6px}
+.adm-game-block .adm-lbl{font-size:10px}
+.adm-lbl{font-size:10px;color:var(--ts);font-weight:700;margin-bottom:4px;display:block;letter-spacing:.5px}
+.adm-inp{width:100%;background:rgba(74,222,128,.03);border:1px solid rgba(74,222,128,.12);border-radius:10px;padding:9px 12px;color:var(--t);font-size:11px;font-family:'Lexend',sans-serif;font-weight:600;outline:none;transition:border-color .2s}
+.adm-inp:focus{border-color:var(--p)}
+.adm-save{background:linear-gradient(135deg,#16a34a,#22c55e);color:#071a0e;border:none;padding:13px;border-radius:14px;width:100%;font-weight:900;font-size:12px;font-family:'Lexend',sans-serif;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .2s;letter-spacing:.5px}
+.adm-save:active{transform:scale(.97)}
+.adm-saved-toast{background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);color:var(--gr);padding:10px 14px;border-radius:12px;font-size:11px;font-weight:800;margin-top:10px;display:none;align-items:center;justify-content:center;gap:7px;animation:fu .3s ease}
+.logo-tap{position:absolute;inset:0;border-radius:50%;z-index:10;cursor:pointer;-webkit-tap-highlight-color:transparent}
 
-    .tg-btn:hover  { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(41,168,226,.50); }
-    .tg-btn:active { transform: translateY(0);    box-shadow: 0 6px 20px rgba(41,168,226,.30); }
+/* ── HAMA HEADER ── */
+.hama-hdr{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 4px 14px;background:linear-gradient(180deg,var(--bg) 70%,transparent)}
+.hama-logo{font-size:19px;font-weight:900;letter-spacing:1px;background:linear-gradient(90deg,#a78bfa,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hama-status{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:800;color:var(--gr);letter-spacing:1px;text-transform:uppercase}
+.hama-status .dot{width:7px;height:7px;border-radius:50%;background:var(--gr);box-shadow:0 0 8px var(--gr);animation:pulseDot 1.6s ease-in-out infinite}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.4}}
 
-    .tg-logo {
-      width: 26px; height: 26px; flex-shrink: 0;
-    }
+/* ── PROFILE BLOCK ── */
+.hama-profile{text-align:center;padding:18px 0 6px}
+.hama-avatar{width:96px;height:96px;border-radius:50%;margin:0 auto 14px;border:3px solid rgba(167,139,250,.45);box-shadow:0 0 36px rgba(96,165,250,.25);overflow:hidden;position:relative}
+.hama-avatar img{width:100%;height:100%;object-fit:cover}
+.hama-welcome{display:inline-block;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.3);color:#c4b5fd;font-size:10px;font-weight:800;letter-spacing:2px;padding:5px 16px;border-radius:20px;margin-bottom:10px}
+.hama-title{font-size:24px;font-weight:900;letter-spacing:.5px;color:#fff;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:6px}
+.hama-sub{font-size:12px;color:var(--ts);margin-bottom:16px}
+.hama-social{display:flex;justify-content:center;gap:12px;margin-bottom:20px}
+.hsoc-btn{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;text-decoration:none;transition:transform .2s}
+.hsoc-btn:active{transform:scale(.92)}
+.hsoc-tg{color:#60a5fa}
+.hsoc-zl{color:#60a5fa;font-weight:900;font-size:11px;letter-spacing:.5px}
+.hsoc-yt{background:rgba(239,68,68,.15);color:#f87171}
 
-    /* ── Features row ── */
-    .features {
-      display: flex; justify-content: center; gap: 24px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
+/* ── SHOP LINK ── */
+.hama-shop{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px 16px;margin-bottom:22px;cursor:pointer;text-decoration:none;color:inherit;transition:transform .2s}
+.hama-shop:active{transform:scale(.98)}
+.hama-shop-icn{width:38px;height:38px;border-radius:12px;background:rgba(167,139,250,.15);display:flex;align-items:center;justify-content:center;color:#a78bfa;flex-shrink:0}
+.hama-shop-txt{flex:1}
+.hama-shop-title{font-size:13px;font-weight:800;color:#fff}
+.hama-shop-sub{font-size:11px;color:#a78bfa;margin-top:1px}
+.hama-shop-arrow{color:var(--tm)}
 
-    .feat {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 12.5px; color: var(--muted);
-    }
+/* ── SECTION LABEL ── */
+.hama-seclbl{display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:800;color:var(--ts);letter-spacing:2px;text-transform:uppercase;margin:8px 0 14px}
+.hama-seclbl .dot-sm{width:6px;height:6px;border-radius:50%;background:var(--gr)}
 
-    .feat-icon { font-size: 14px; }
+/* ── AUTO KEY CARD ── */
+.hama-autokey{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1.5px solid rgba(96,165,250,.4);border-radius:18px;padding:14px 16px;margin-bottom:24px;box-shadow:0 0 24px rgba(96,165,250,.08)}
+.hama-autokey-icn{width:46px;height:46px;border-radius:14px;overflow:hidden;flex-shrink:0;position:relative;background:rgba(0,0,0,.2)}
+.hama-autokey-icn img{width:100%;height:100%;object-fit:cover}
+.hama-autokey-icn .key-badge{position:absolute;top:-3px;right:-3px;width:18px;height:18px;border-radius:50%;background:#fbbf24;display:flex;align-items:center;justify-content:center;color:#071a0e;box-shadow:0 0 0 2px var(--bg)}
+.hama-autokey-txt{flex:1;min-width:0}
+.hama-autokey-name{font-size:13px;font-weight:800;color:#e879f9;margin-bottom:3px}
+.hama-autokey-time{font-size:10.5px;color:var(--tm);display:flex;align-items:center;gap:5px}
+.hama-autokey-btn{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;border:none;cursor:pointer;transition:transform .2s}
+.hama-autokey-btn:active{transform:scale(.92)}
 
-    /* ── Footer ── */
-    .footer {
-      margin-top: 36px;
-      font-size: 12px; color: var(--muted);
-      text-align: center;
-      line-height: 1.6;
-    }
+/* ── GAME GRID (LINK TẢI GAME) ── */
+.hgame-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
+.hgame-card{position:relative;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.hgame-card::before{content:'';position:absolute;top:0;left:14px;right:14px;height:2px;background:linear-gradient(90deg,#60a5fa,#a78bfa);border-radius:0 0 4px 4px;opacity:.85}
+.hgame-card.maintenance::before{background:linear-gradient(90deg,#f87171,#fb923c)}
+.hgame-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.hgame-icon{width:48px;height:48px;border-radius:13px;overflow:hidden;flex-shrink:0;background:rgba(0,0,0,.2);position:relative}
+.hgame-icon img{width:100%;height:100%;object-fit:cover}
+.hgame-newtag{position:absolute;top:-6px;left:-6px;background:#60a5fa;color:#fff;font-size:8px;font-weight:900;padding:2px 6px;border-radius:6px;letter-spacing:.5px;box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:2}
+.hgame-actions{display:flex;gap:6px;flex-shrink:0}
+.hgame-act{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:#c4b5fd;cursor:pointer;transition:transform .2s;flex-shrink:0}
+.hgame-act:active{transform:scale(.88)}
+.hgame-act.dl{color:#86efac}
+.hgame-name{font-size:13px;font-weight:800;color:#fff;line-height:1.3}
+.hgame-status-row{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700}
+.hgame-status-row .dot-sm{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.hgame-status-row.online{color:var(--gr)}
+.hgame-status-row.online .dot-sm{background:var(--gr);box-shadow:0 0 6px var(--gr)}
+.hgame-status-row.maint{color:#fb923c}
+.hgame-status-row.maint .dot-sm{background:#fb923c}
+.hgame-status-row.locked{color:#fb923c}
+.hgame-status-row.locked .dot-sm{background:#fb923c}
+.hgame-tag{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;color:#93c5fd;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.15);padding:5px 9px;border-radius:10px;line-height:1.4}
+.hgame-tag svg{width:10px;height:10px;flex-shrink:0}
 
-    /* Responsive */
-    @media (max-width: 480px) {
-      .card { padding: 40px 24px 36px; }
-      .features { gap: 16px; }
-    }
-
-    /* Respect reduced-motion */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; }
-    }
-  </style>
+/* FAQ */
+.hama-faq{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin:20px 0 6px;color:var(--ts);font-size:12px;font-weight:700;cursor:pointer}
+.hama-foot{text-align:center;color:var(--tm);font-size:10px;font-weight:700;letter-spacing:1px;padding:14px 0 26px}
+</style>
 </head>
 <body>
-<div class="page">
-  <div class="card">
+<div class="bg-mesh"></div>
+<div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
 
-    <!-- Gear animation -->
-    <div class="gear-wrap">
-      <div class="gear-ring"></div>
-      <div class="gear-ring-2"></div>
-      <span class="gear-icon">⚙️</span>
+<!-- LANG - phải -->
+<div class="lang-box">
+  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+  <select id="langSel" onchange="applyLang()">
+    <option value="vi">VIE</option>
+    <option value="en">ENG</option>
+  </select>
+</div>
+
+<!-- TOAST - trái -->
+<div id="toast">
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg"></span>
+</div>
+
+<div id="lbox"></div>
+
+<!-- AUTH -->
+<div id="auth">
+  <div class="auth-wrap">
+    <div class="auth-logo" style="position:relative"><div class="logo-tap" onclick="logoTap()"></div>
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgJ7WT05MQiGEF8hJuf7ihlDYBVYGjAFI1L6QyA7lojVe8yfPhGMezvFQdGKZXgFIvcpv9wlrsN3f7vAxpAHP3TNGtLDYHCbZHOivr66v9WO2ExDQ8RgVwcdpYkfNyJ5KnXxM1uVxfI7tATU-ECZVbTfEF3jD_5c42-XAUX5AZi2VkWcTpJVOduMzVwan4/s800/1000028419.webp" alt="Logo">
+    </div>
+    <div class="gb">WORLD CUP</div>
+    <div class="wc-flags">🇧🇷🇩🇪🇫🇷🇦🇷🇪🇸🇵🇹🇬🇧🇯🇵</div>
+    <div class="auth-sub">
+      OWNER: VAN HIEP
+      <svg class="vtick" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="var(--p)"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    </div>
+    <p class="auth-desc" id="t-sys_sec">Game Mods ⚽</p>
+    <div class="auth-btn-wrap">
+      <button class="auth-btn" onclick="openNotice()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        <span id="t-access">TRUY CẬP</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTICE MODAL -->
+<div id="mod-notice" class="overlay">
+  <div class="mcard">
+    <div class="ntag">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="var(--s)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span id="t-sys_notice">⚽ THÔNG BÁO</span>
+    </div>
+    <div class="rtime" id="t-reset_time">🕒 RESET KEY: KEY SẼ ĐƯỢC UPDATE LÚC 8:00</div>
+    <p class="ndesc" id="t-mission">Hoàn thành nhiệm vụ ngắn để lấy mã kích hoạt sử dụng trong 24h.</p>
+    <div class="wbox">
+      <span id="t-warning">⚠️ CẢNH BÁO: CHỈ 1 KEY / 1 MÁY</span><br>
+      <span style="opacity:.7;font-weight:400">VanHiep Đẹp Trai
+        <svg class="vtick" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="var(--p)"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </span>
+    </div>
+    <button class="bprem" onclick="enterMain()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <span id="t-understand">ĐÃ HIỂU</span>
+    </button>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div id="mod-confirm" class="overlay">
+  <div class="mcard">
+    <div id="c-content">
+      <div style="margin-bottom:14px">
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2 id="c-title" style="font-size:15px;margin-bottom:10px;font-weight:900"></h2>
+      <div id="c-text" style="font-size:13px;color:var(--ts);line-height:1.6;text-align:left"></div>
+      <div class="bgrp">
+        <button class="bcancel" onclick="closeConfirm()" id="t-cancel">HỦY</button>
+        <button class="bprem" style="margin-bottom:0;flex:2" id="c-yes"><span id="t-agree">ĐỒNG Ý</span></button>
+      </div>
+    </div>
+    <div id="c-loading" style="display:none">
+      <div class="spin"></div>
+      <h2 style="color:var(--p);font-size:15px;font-weight:900" id="t-redir">Đang chuyển hướng...</h2>
+      <p style="font-size:11px;color:var(--tm);margin-top:10px" id="t-wait">Vui lòng chờ trong giây lát</p>
+    </div>
+  </div>
+</div>
+
+<audio id="bgm" loop><source src="https://litter.catbox.moe/88uun1wzq189f101.mp3" type="audio/mpeg"></audio>
+
+<!-- DL CHOICE MODAL -->
+<div id="mod-dl-choice" class="overlay">
+  <div class="mcard">
+    <div style="margin-bottom:10px">
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </div>
+    <h2 id="dlc-title" style="font-size:15px;font-weight:900;margin-bottom:6px;color:#fff"></h2>
+    <p style="font-size:11px;color:var(--ts);margin-bottom:4px">Chọn loại file bạn muốn tải:</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+      <button id="dlc-apk-btn" style="display:flex;align-items:center;gap:14px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:16px;padding:16px;cursor:pointer;text-align:left;font-family:'Lexend',sans-serif;width:100%;transition:all .2s">
+        <div style="width:42px;height:42px;border-radius:12px;background:rgba(74,222,128,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#4ade80">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:3px">LINK TẢI GAME</div>
+          <div style="font-size:10px;color:var(--ts);font-weight:600">Tải file APK / cài đặt game</div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tm)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <button id="dlc-obb-btn" style="display:flex;align-items:center;gap:14px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);border-radius:16px;padding:16px;cursor:pointer;text-align:left;font-family:'Lexend',sans-serif;width:100%;transition:all .2s">
+        <div style="width:42px;height:42px;border-radius:12px;background:rgba(251,191,36,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fbbf24">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:3px">OBB GAME</div>
+          <div style="font-size:10px;color:var(--ts);font-weight:600">Tải file OBB / dữ liệu game</div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tm)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <div class="bgrp" style="margin-top:16px">
+      <button class="bcancel" onclick="closeOverlay('mod-dl-choice')">HỦY</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="wrap">
+
+    <!-- PROFILE -->
+    <div class="hama-profile">
+      <div class="hama-avatar" style="position:relative;background:linear-gradient(135deg,#1e1b4b,#312e81);display:flex;align-items:center;justify-content:center">
+        <div class="logo-tap" onclick="logoTap()"></div>
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgJ7WT05MQiGEF8hJuf7ihlDYBVYGjAFI1L6QyA7lojVe8yfPhGMezvFQdGKZXgFIvcpv9wlrsN3f7vAxpAHP3TNGtLDYHCbZHOivr66v9WO2ExDQ8RgVwcdpYkfNyJ5KnXxM1uVxfI7tATU-ECZVbTfEF3jD_5c42-XAUX5AZi2VkWcTpJVOduMzVwan4/s800/1000028419.webp" alt="Logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%">
+      </div>
+      <div class="hama-welcome">WELCOME TO</div>
+      <div class="hama-title">KISS MODS
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#818cf8"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="hama-sub" id="t-sys_sec">Hỗ Trợ Mod Game Uy Tín Số 1.</div>
+
+      <div class="hama-social">
+        <a href="https://t.me/vhmodsgames" class="hsoc-btn hsoc-tg" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </a>
+        <a href="#" class="hsoc-btn hsoc-yt" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>
+        </a>
+      </div>
+
+      <a href="https://t.me/Vepspat" class="hama-shop" target="_blank">
+        <div class="hama-shop-icn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M5 9v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9"/><path d="M9 22V12h6v10"/></svg>
+        </div>
+        <div class="hama-shop-txt">
+          <div class="hama-shop-title">Mua Key</div>
+          <div class="hama-shop-sub">Admin</div>
+        </div>
+        <svg class="hama-shop-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
     </div>
 
-    <!-- Badge -->
-    <div class="badge">
-      <span class="badge-dot"></span>
-      Đang Cập Nhật
+    <!-- LINK TẢI GAME -->
+    <div class="hama-seclbl">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      LINK TẢI GAME
+    </div>
+    <div class="hgame-grid" id="hgameGrid"><!-- generated by JS --></div>
+
+    <div class="hama-faq" onclick="toast(lang==='vi'?'Liên hệ Admin Telegram để được hỗ trợ.':'Contact Telegram Admin for support.')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg>
+      FAQ — Hỏi Đáp
     </div>
 
-    <!-- Title -->
-    <h1>Website Đang Được<br>Nâng Cấp &amp; Cải Thiện</h1>
+    <footer class="hama-foot">© DEVELOPED BY KISS MODS 2026</footer>
+  </div>
+</div>
 
-    <p class="subtitle">
-      Chúng tôi đang nâng cấp hệ thống để mang đến trải nghiệm tốt hơn.<br>
-      Vui lòng quay lại sớm. Xin lỗi vì sự bất tiện này!
-    </p>
+<script>
+// ── DATA NGÔN NGỮ ──
+const T = {
+  vi: {
+    sys_sec:"System Premium Security", access:"TRUY CẬP",
+    sys_notice:"THÔNG BÁO HỆ THỐNG", reset_time:"🕒 RESET KEY: UPDATE LÚC 8:00 MỖI NGÀY",
+    mission:"Hoàn thành nhiệm vụ ngắn để lấy mã kích hoạt sử dụng trong 24h.",
+    warning:"⚠️ CẢNH BÁO: CHỈ 1 KEY / 1 MÁY", understand:"ĐÃ HIỂU",
+    cancel:"HỦY", agree:"ĐỒNG Ý",
+    redir:"Đang chuyển hướng...", wait:"Vui lòng chờ trong giây lát",
+    get_key:"Nhận Key Miễn Phí", get_now:"LẤY KEY NGAY",
+    buy_key:"MUA KEY ADMIN", buy_ios:"MUA HACK FC IOS",
+    dl_mod:"Download Game Mod", global:"QUỐC TẾ", vn:"VIỆT NAM",
+    txiu:"TOOL TÀI XỈU MỌI GAME",
+    sys_status:"TRẠNG THÁI HỆ THỐNG",
+    lbl_ver:"Phiên bản", lbl_sta:"Trạng thái", lbl_rst:"Reset key", lbl_rst_val:"00:00 mỗi ngày",
+    social1:"KÊNH CHÍNH", social2:"NHÓM CHAT",
+    toast_sel:"Đã chọn: ", toast_warn:"Vui lòng chọn game trước!",
+    conf_key:"Bạn muốn lấy key cho game", conf_dl:"Bắt đầu tải mod:",
+    // pubg
+    pubg_title:"CHỌN PHIÊN BẢN PUBG",
+    pubg_note_h:"LƯU Ý QUAN TRỌNG:",
+    pubg_n1:"1. Đăng nhập bằng tài khoản Facebook (xoá app Facebook trước).",
+    pubg_n2:"2. Tài khoản Google phải quét QR.",
+    pubg_m43:"PUBG RED VIETNAM 64BIT 4.4", pubg_obb:"TẢI OBB PUBG VIET NAM",
+    pubg_g43:"PUBG JAVA GLOBAL 64BIT 4.4", pubg_obbg:"TẢI OBB PUBG GLOBAL",
+    // fc ios
+    ios_title:"BẢNG GIÁ HACK FC IOS",
+    ios_p1:"VĨNH VIỄN", ios_p2:"3 THÁNG", ios_p3:"01 THÁNG",
+    ios_note:"Nhấn ĐỒNG Ý để liên hệ Admin Telegram",
+    // txiu
+    txiu_title:"TOOL TÀI XỈU MỌI GAME",
+    txiu_wh:"TOOL TÀI XỈU LÀ GÌ?",
+    txiu_desc:"Tool hỗ trợ phân tích xu hướng tài xỉu trong các game như Hitclub, Go88, Sunwin... Giúp bạn đọc cầu, thống kê chuỗi để đưa ra quyết định hợp lý hơn.",
+    txiu_wt:"⚠️ ĐỌC TRƯỚC KHI MUA",
+    txiu_warn:"Bạn có thực sự muốn mua không? Tool chỉ hỗ trợ phân tích — KHÔNG đảm bảo thắng 100%. Hãy chắc chắn bạn hiểu rõ rủi ro và chỉ chơi với số tiền có thể chấp nhận mất. Bạn có khẳng định muốn chơi không?",
+    txiu_btn:"XÁC NHẬN — ĐI MUA"
+  },
+  en: {
+    sys_sec:"System Premium Security", access:"ACCESS",
+    sys_notice:"SYSTEM NOTICE", reset_time:"🕒 RESET KEY: 00:00 DAILY",
+    mission:"Complete short tasks to get an activation key valid for 24h.",
+    warning:"⚠️ WARNING: ONLY 1 KEY PER DEVICE", understand:"UNDERSTOOD",
+    cancel:"CANCEL", agree:"AGREE",
+    redir:"Redirecting...", wait:"Please wait a moment",
+    get_key:"Get Free Key", get_now:"GET KEY NOW",
+    buy_key:"BUY ADMIN KEY", buy_ios:"BUY HACK FC IOS",
+    dl_mod:"Download Game Mod", global:"GLOBAL", vn:"VIETNAM",
+    txiu:"TAI XIU TOOL ALL GAMES",
+    sys_status:"SYSTEM STATUS",
+    lbl_ver:"Version", lbl_sta:"Status", lbl_rst:"Key reset", lbl_rst_val:"Every 00:00",
+    social1:"MAIN CHANNEL", social2:"CHAT GROUP",
+    toast_sel:"Selected: ", toast_warn:"Please select a game first!",
+    conf_key:"Get key for game", conf_dl:"Start downloading mod:",
+    // pubg
+    pubg_title:"SELECT PUBG VERSION",
+    pubg_note_h:"IMPORTANT NOTES:",
+    pubg_n1:"1. Login with Facebook account (uninstall Facebook app first).",
+    pubg_n2:"2. Google accounts must scan QR code.",
+    pubg_m43:"DOWNLOAD PUBG MOBILE 4.4 (VN)", pubg_obb:"DOWNLOAD OBB PUBG (VN)",
+    pubg_g43:"DOWNLOAD PUBG GLOBAL 4.4", pubg_obbg:"DOWNLOAD OBB GLOBAL",
+    // fc ios
+    ios_title:"FC IOS HACK PRICING",
+    ios_p1:"LIFETIME", ios_p2:"12 MONTHS", ios_p3:"06 MONTHS",
+    ios_note:"Tap AGREE to contact Telegram Admin",
+    // txiu
+    txiu_title:"TAI XIU TOOL ALL GAMES",
+    txiu_wh:"WHAT IS TAI XIU TOOL?",
+    txiu_desc:"A tool that helps analyze Hi-Lo trends in games like Zingplay, Go88, Sunwin... Helps you read streaks and make smarter decisions.",
+    txiu_wt:"⚠️ READ BEFORE BUYING",
+    txiu_warn:"Are you sure you want to buy? This tool only assists analysis — does NOT guarantee 100% wins. Please make sure you understand the risks and only play with money you can afford to lose. Do you truly confirm you want to proceed?",
+    txiu_btn:"CONFIRM — BUY NOW"
+  }
+};
 
-    <!-- Divider -->
-    <div class="divider">
-      <span></span>
-      <em>📢 Nhận thông báo ngay</em>
-      <span></span>
+// ── MAP id → key ──
+const ID_MAP = {
+  't-sys_sec':'sys_sec','t-access':'access','t-sys_notice':'sys_notice',
+  't-reset_time':'reset_time','t-mission':'mission','t-warning':'warning',
+  't-understand':'understand','t-cancel':'cancel','t-agree':'agree',
+  't-redir':'redir','t-wait':'wait','t-get_key':'get_key','t-get_now':'get_now',
+  't-buy_key':'buy_key','t-buy_ios':'buy_ios','t-dl_mod':'dl_mod',
+  't-global':'global','t-vn':'vn','t-txiu':'txiu',
+  't-sys_status':'sys_status','t-lbl_ver':'lbl_ver','t-lbl_sta':'lbl_sta',
+  't-lbl_rst':'lbl_rst','t-lbl_rst_val':'lbl_rst_val',
+  't-social1':'social1','t-social2':'social2'
+};
+
+let lang='vi', sel='', destUrl='';
+
+function applyLang() {
+  lang = document.getElementById('langSel').value;
+  const t = T[lang];
+  for (const [id, key] of Object.entries(ID_MAP)) {
+    const el = document.getElementById(id);
+    if (el && t[key] !== undefined) el.textContent = t[key];
+  }
+  if (typeof renderGameGrid === 'function') renderGameGrid();
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function openOverlay(id) {
+  const o = document.getElementById(id);
+  o.style.display = 'flex';
+  requestAnimationFrame(() => requestAnimationFrame(() => o.classList.add('show')));
+}
+function closeOverlay(id) {
+  const o = document.getElementById(id);
+  o.classList.add('closing');
+  setTimeout(() => { o.classList.remove('show','closing'); o.style.display='none'; }, 320);
+}
+
+function openNotice() {
+  const auth = document.getElementById('auth');
+  auth.style.opacity = '0'; auth.style.pointerEvents = 'none';
+  setTimeout(() => { auth.style.display='none'; openOverlay('mod-notice'); }, 480);
+}
+
+function enterMain() {
+  closeOverlay('mod-notice');
+  document.getElementById('bgm').play().catch(()=>{});
+  setTimeout(() => {
+    const m = document.getElementById('main');
+    m.style.display = 'flex';
+    requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('show')));
+  }, 350);
+}
+
+function closeConfirm() {
+  closeOverlay('mod-confirm');
+  setTimeout(() => {
+    document.getElementById('c-content').style.display = 'block';
+    document.getElementById('c-loading').style.display = 'none';
+    document.getElementById('c-yes').style.display = '';
+    document.getElementById('c-yes').onclick = null;
+  }, 350);
+}
+
+function openConfirm(title, html, url, btnLabel, onYes) {
+  document.getElementById('c-title').textContent = title;
+  document.getElementById('c-text').innerHTML = html;
+  document.getElementById('c-content').style.display = 'block';
+  document.getElementById('c-loading').style.display = 'none';
+  document.getElementById('t-cancel').textContent = T[lang].cancel;
+  const yesBtn = document.getElementById('c-yes');
+  if (btnLabel) {
+    yesBtn.querySelector('span') ? yesBtn.querySelector('span').textContent = btnLabel : yesBtn.textContent = btnLabel;
+  }
+  if (onYes === false) {
+    yesBtn.style.display = 'none';
+  } else {
+    yesBtn.style.display = '';
+    yesBtn.onclick = onYes || function() {
+      document.getElementById('c-content').style.display = 'none';
+      document.getElementById('c-loading').style.display = 'block';
+      document.getElementById('t-redir').textContent = T[lang].redir;
+      document.getElementById('t-wait').textContent = T[lang].wait;
+      setTimeout(() => { window.location.href = url; }, 1500);
+    };
+  }
+  destUrl = url;
+  openOverlay('mod-confirm');
+}
+
+// ── DANH SÁCH GAME (giống Hama Mods) ──
+// status: 'online' | 'maint' | 'locked'
+// key/dl: link cho nút 🔑 và nút ⬇️ — chỉnh trong ADMIN PANEL
+const SVG = {
+  soccer:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2c0 0-3 4-3 10s3 10 3 10"/><path d="M12 2c0 0 3 4 3 10s-3 10-3 10"/><path d="M2 12h20"/></svg>`,
+  shield:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+  ball:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>`,
+  target:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>`,
+  house:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  flame:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 17a2.5 2.5 0 0 0 2.5-2.5c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3 1.072-2.143.224-4.054 2-6"/></svg>`,
+  book:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+  ghost:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10h.01M15 10h.01M12 2a8 8 0 0 0-8 8v10l3-2 2 2 3-2 3 2 2-2 3 2V10a8 8 0 0 0-8-8z"/></svg>`,
+  key:`<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
+  download:`<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+};
+
+window.gameLinks = {
+  'fc_qt':    {name:'FC QUỐC TẾ JAVA',      tag:'HACK FC GLOBAL ANDROID',       icon:SVG.soccer,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/fRsQ',       dl:'https://vuotnhanh.com/fRsQ',       obb:''},
+  'fc_java':  {name:'FC VIỆT NAM JAVA',                tag:'HACK FC VN ANDROID',            icon:SVG.soccer,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/fRsQ',       dl:'https://vuotnhanh.com/fRsQ',       obb:''},
+  '8ball':    {name:'8 BALL POOL',       tag:'HACK 8 BALL POOL ANDROID',      icon:SVG.ball,    img:'', status:'online', isNew:true, key:'https://link4m.net/RXHNlx',       dl:'https://vuotnhanh.com/Psqg',       obb:''},
+  'lq_chap':  {name:'LIÊN QUÂN s38',   tag:'LIÊN QUÂN s38 ANDROID',    icon:SVG.shield,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/jtUw',       dl:'https://vuotnhanh.com/jtUw',       obb:''},
+  'lq_map':   {name:'LIÊN QUÂN 38 [TÁCH GỐC]',        tag:'LIÊN QUÂN s38 TÁCH GỐC ANDROID',    icon:SVG.shield,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/WkaM',       dl:'https://vuotnhanh.com/WkaM',       obb:''},
+  'pubg':     {name:'PUBG VIỆT NAM RED 4.4',           tag:'HACK PUBG MOBILE 4.4 ANDROID',      icon:SVG.target,  img:'', status:'online', isNew:true, key:'https://link4m.org/d2mbjiPC',     dl:'https://vuotnhanh.com/gWJH',       obb:''},
+  'pubg_ldr': {name:'PUBG QUỐC TẾ RED 4.4',           tag:'HACK PUBG MOBILE 4.4 ANDROID',      icon:SVG.target,  img:'', status:'online', isNew:true, key:'https://link4m.org/d2mbjiPC',     dl:'https://vuotnhanh.com/PixL',       obb:''},
+  'pt':       {name:'BLOOD STRIKE',              tag:'VIP', icon:SVG.house, img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/aOKr',       dl:'https://vuotnhanh.com/aOKr',       obb:''},
+  'cf':       {name:'CROSSFIRE LEGENDS',      tag:'Crossfire Legends ANDROID',     icon:SVG.flame,   img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/UDUP',       dl:'https://vuotnhanh.com/UDUP',       obb:''},
+};
+const gameLinks = window.gameLinks;
+
+const STATUS_LABEL = {
+  online: {vi:'ONLINE', en:'ONLINE'},
+  maint:  {vi:'BẢO TRÌ', en:'MAINTENANCE'},
+  locked: {vi:'ONLINE', en:'ONLINE'}
+};
+
+function renderGameGrid() {
+  const grid = document.getElementById('hgameGrid');
+  if (!grid) return;
+  grid.innerHTML = Object.entries(gameLinks).map(([id, g]) => {
+    const statusClass = g.status === 'maint' ? 'maint' : (g.status === 'locked' ? 'locked' : 'online');
+    const cardClass = g.status === 'maint' ? 'hgame-card maintenance' : 'hgame-card';
+    const lbl = STATUS_LABEL[g.status][lang] || STATUS_LABEL[g.status].vi;
+    const iconHtml = g.img
+      ? `<img src="${g.img}" alt="${g.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+         <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;color:#93c5fd">${g.icon.replace('width="15" height="15"','width="22" height="22"').replace('stroke-width="2.3"','stroke-width="1.6"')}</div>`
+      : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#93c5fd">${g.icon.replace('width="15" height="15"','width="22" height="22"').replace('stroke-width="2.3"','stroke-width="1.6"')}</div>`;
+    return `
+    <div class="${cardClass}">
+      <div class="hgame-top">
+        <div class="hgame-icon">
+          ${g.isNew ? '<span class="hgame-newtag">NEW</span>' : ''}
+          ${iconHtml}
+        </div>
+        <div class="hgame-actions">
+          <button class="hgame-act key" onclick="doGameKey('${id}')" title="Lấy key">${SVG.key}</button>
+          <button class="hgame-act dl" onclick="doGameDL('${id}')" title="Tải game">${SVG.download}</button>
+        </div>
+      </div>
+      <div class="hgame-name">${g.name}</div>
+      <div class="hgame-status-row ${statusClass}"><span class="dot-sm"></span> ${lbl}</div>
+      <div class="hgame-tag">📍 ${g.tag}</div>
+    </div>`;
+  }).join('');
+}
+
+function doGameKey(id) {
+  const g = gameLinks[id];
+  const t = T[lang];
+  if (!g || !g.key) { toast(lang==='vi'?'Tính năng đang bảo trì!':'Feature under maintenance!'); return; }
+  openConfirm(t.get_now, `${t.conf_key} <b style="color:var(--p)">${g.name}</b>?`, g.key, t.agree);
+}
+
+function doGameDL(id) {
+  const g = gameLinks[id];
+  const t = T[lang];
+  if (!g || (!g.dl && !g.obb)) { toast(lang==='vi'?'Tính năng đang bảo trì!':'Feature under maintenance!'); return; }
+  const hasDl = !!g.dl;
+  const hasObb = !!g.obb;
+  // Nếu chỉ có 1 loại → mở thẳng
+  if (hasDl && !hasObb) { openConfirm(t.dl_mod, `${t.conf_dl} <b style="color:var(--p)">${g.name}</b>?`, g.dl, t.agree); return; }
+  if (!hasDl && hasObb) { openConfirm('TẢI OBB GAME', `Tải OBB cho <b style="color:var(--p)">${g.name}</b>?`, g.obb, t.agree); return; }
+  // Có cả 2 → hiện modal chọn
+  document.getElementById('dlc-title').textContent = g.name;
+  const apkBtn = document.getElementById('dlc-apk-btn');
+  const obbBtn = document.getElementById('dlc-obb-btn');
+  apkBtn.onclick = () => { closeOverlay('mod-dl-choice'); setTimeout(() => openConfirm(t.dl_mod, `${t.conf_dl} <b style="color:var(--p)">${g.name}</b>?`, g.dl, t.agree), 340); };
+  obbBtn.onclick = () => { closeOverlay('mod-dl-choice'); setTimeout(() => openConfirm('TẢI OBB GAME', `Tải OBB cho <b style="color:var(--p)">${g.name}</b>?`, g.obb, t.agree), 340); };
+  openOverlay('mod-dl-choice');
+}
+
+// Nút Auto Get Key (card phía trên) — mở key cho game đầu tiên / hoặc dẫn tới shop key
+function doGetKey() {
+  window.open('https://t.me/Vepspat', '_blank');
+}
+
+renderGameGrid();
+
+// CLOCK
+function tick() {
+  const n = new Date();
+  const timeStr = String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
+  const dateStr = n.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const rt = document.getElementById('realTime'); if (rt) rt.textContent = timeStr;
+  const rd = document.getElementById('realDate'); if (rd) rd.textContent = dateStr;
+  const at = document.getElementById('autokeyTime'); if (at) at.textContent = timeStr;
+  const ad = document.getElementById('autokeyDate'); if (ad) ad.textContent = dateStr;
+}
+setInterval(tick,1000); tick();
+
+// LIXI
+// Soccer / World Cup icons pool
+const DOLLAR_ICONS = [
+  // Soccer ball
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2c0 0-4 3-4 10s4 10 4 10"/><path d="M12 2c0 0 4 3 4 10s-4 10-4 10"/><path d="M2 12h20"/><path d="M4.5 6.5l15 0"/><path d="M4.5 17.5l15 0"/></svg>`,
+  // Trophy
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M12 17v4"/><path d="M8 21h8"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4z"/></svg>`,
+  // Star
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
+];
+
+function spawnLixi() {
+  const box = document.getElementById('lbox');
+  if (box.childElementCount > 12) return;
+  const el = document.createElement('div');
+  el.className = 'lixi';
+  const size = Math.random()*10+14;
+  const icon = DOLLAR_ICONS[Math.floor(Math.random()*DOLLAR_ICONS.length)];
+  el.innerHTML = icon;
+  el.style.left = Math.random()*93+'vw';
+  el.style.width = size+'px';
+  el.style.height = size+'px';
+  el.style.opacity = (Math.random()*0.4+0.5).toString();
+  el.style.animationDuration = (Math.random()*2.5+3)+'s';
+  // random color: green or gold
+  el.style.color = Math.random()>0.5 ? '#4ade80' : '#fbbf24';
+  box.appendChild(el);
+  setTimeout(()=>el.remove(), 6500);
+}
+setInterval(spawnLixi, 900);
+
+// ── ADMIN ──
+const ADM_PASS = 'vhiep2024'; // ĐỔI MẬT KHẨU Ở ĐÂY
+let logoTapCount = 0, logoTapTimer = null;
+
+function logoTap() {
+  logoTapCount++;
+  if (logoTapTimer) clearTimeout(logoTapTimer);
+  logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1800);
+  if (logoTapCount >= 5) {
+    logoTapCount = 0;
+    openAdm();
+  }
+}
+
+function openAdm() {
+  const o = document.getElementById('adm-overlay');
+  const login = document.getElementById('adm-login');
+  const panel = document.getElementById('adm-panel');
+  login.style.display = 'block';
+  panel.style.display = 'none';
+  document.getElementById('adm-pw').value = '';
+  document.getElementById('adm-err').style.display = 'none';
+  o.classList.add('open');
+}
+
+function closeAdm() {
+  document.getElementById('adm-overlay').classList.remove('open');
+}
+
+function togglePw() {
+  const inp = document.getElementById('adm-pw');
+  const icon = document.getElementById('eye-icon');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+  } else {
+    inp.type = 'password';
+    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  }
+}
+
+function admLogin() {
+  const pw = document.getElementById('adm-pw').value;
+  const err = document.getElementById('adm-err');
+  if (pw === ADM_PASS) {
+    document.getElementById('adm-login').style.display = 'none';
+    document.getElementById('adm-panel').style.display = 'block';
+    admLoadLinks();
+  } else {
+    err.style.display = 'block';
+    err.textContent = '❌ Sai mật khẩu! Thử lại.';
+    document.getElementById('adm-pw').value = '';
+    setTimeout(() => { err.style.display = 'none'; }, 2500);
+  }
+}
+
+// Enter key = đăng nhập
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('adm-overlay').classList.contains('open')) {
+    if (document.getElementById('adm-login').style.display !== 'none') admLogin();
+  }
+});
+
+function admLoadLinks() {
+  const saved = window._links || {};
+  const box = document.getElementById('adm-game-fields');
+  box.innerHTML = Object.entries(gameLinks).map(([id, g]) => `
+    <div class="adm-game-block">
+      <div class="adm-game-block-name">
+        ${g.name}
+        <select class="adm-game-status-sel" id="al-${id}-status">
+          <option value="online" ${g.status==='online'?'selected':''}>ONLINE</option>
+          <option value="maint" ${g.status==='maint'?'selected':''}>BẢO TRÌ</option>
+          <option value="locked" ${g.status==='locked'?'selected':''}>MUA KEY</option>
+        </select>
+      </div>
+      <div class="adm-row"><span class="adm-lbl">Link Ảnh Icon 🖼️</span><input class="adm-inp" id="al-${id}-img" placeholder="https://..." value="${(g.img||'').replace(/"/g,'&quot;')}"></div>
+      <div class="adm-row"><span class="adm-lbl">Link Key 🔑</span><input class="adm-inp" id="al-${id}-key" placeholder="https://..." value="${(g.key||'').replace(/"/g,'&quot;')}"></div>
+      <div class="adm-row"><span class="adm-lbl">Link Tải APK ⬇️</span><input class="adm-inp" id="al-${id}-dl" placeholder="https://..." value="${(g.dl||'').replace(/"/g,'&quot;')}"></div>
+      <div class="adm-row"><span class="adm-lbl">Link OBB 📦</span><input class="adm-inp" id="al-${id}-obb" placeholder="https://..." value="${(g.obb||'').replace(/"/g,'&quot;')}"></div>
+    </div>`).join('');
+  document.getElementById('al-tg').value = saved['tg'] || '';
+}
+
+function admSave() {
+  const v = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  for (const id of Object.keys(gameLinks)) {
+    gameLinks[id].img = v(`al-${id}-img`);
+    gameLinks[id].key = v(`al-${id}-key`);
+    gameLinks[id].dl = v(`al-${id}-dl`);
+    gameLinks[id].obb = v(`al-${id}-obb`);
+    const statusEl = document.getElementById(`al-${id}-status`);
+    if (statusEl) gameLinks[id].status = statusEl.value;
+  }
+  renderGameGrid();
+
+  const data = {
+    gameLinks: { ...gameLinks },
+    'tg': v('al-tg'),
+  };
+  localStorage.setItem('vhmods_links', JSON.stringify(data));
+  window._links = data;
+
+  // Save lên Firebase → tất cả user thấy ngay
+  saveToFirebase(data).then(() => {
+    const t = document.getElementById('adm-saved');
+    t.style.display = 'flex';
+    t.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Đã lưu Firebase! Tất cả user thấy ngay.';
+    setTimeout(() => { t.style.display = 'none'; }, 3000);
+  }).catch(err => {
+    // Đã lưu local + render ngay nên link ảnh vẫn hiện trên máy này.
+    // Lỗi dưới đây chỉ ảnh hưởng việc đồng bộ cho user khác (vd: Firebase rules chặn write, hoặc mất mạng).
+    console.error('Lỗi lưu Firebase:', err);
+    let reason = err.message || 'Không xác định';
+    if (err.code === 'PERMISSION_DENIED') {
+      reason = 'Bị chặn quyền ghi (PERMISSION_DENIED). Cần mở quyền write trong Firebase Realtime Database Rules.';
+    }
+    alert('⚠️ Đã lưu trên máy này, nhưng lưu lên Firebase thất bại nên người dùng khác sẽ chưa thấy thay đổi:\n' + reason);
+  });
+}
+
+// Load links từ Firebase khi khởi động
+function loadSavedLinks() {
+  loadFirebaseLinks();
+}
+loadSavedLinks();
+
+// Sau 2s, tự động đẩy danh sách game sạch lên Firebase để xoá data cũ
+setTimeout(() => {
+  if (!document.getElementById('adm-overlay').classList.contains('open')) {
+    const cleanGameLinks = {};
+    for (const id of Object.keys(window.gameLinks)) {
+      cleanGameLinks[id] = {
+        img: window.gameLinks[id].img || '',
+        key: window.gameLinks[id].key || '',
+        dl:  window.gameLinks[id].dl  || '',
+        obb: window.gameLinks[id].obb || '',
+        status: window.gameLinks[id].status || 'online',
+      };
+    }
+    const tgEl = document.getElementById('al-tg');
+    saveToFirebase({ gameLinks: cleanGameLinks, tg: (window._links && window._links.tg) || '' });
+  }
+}, 2000);
+
+
+</script>
+
+<!-- ADMIN OVERLAY -->
+<div id="adm-overlay" class="adm-overlay">
+
+  <!-- LOGIN BOX -->
+  <div id="adm-login" class="adm-login-box">
+    <div class="adm-login-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     </div>
-
-    <!-- Telegram CTA -->
-    <a class="tg-btn" href="https://t.me/vhmodsgames" target="_blank" rel="noopener">
-      <!-- Telegram SVG logo -->
-      <svg class="tg-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="24" fill="white" fill-opacity="0.15"/>
-        <path d="M10.5 23.2l26.3-10.1c1.2-.5 2.3.3 1.9 1.9l-4.5 21.3c-.3 1.4-1.2 1.7-2.4 1.1l-6.6-4.9-3.2 3.1c-.4.4-.7.7-1.4.7l.5-6.8 12.7-11.5c.6-.5-.1-.8-.8-.3L15.4 28.4l-6.4-2c-1.4-.4-1.4-1.4.2-2.2z" fill="white"/>
-      </svg>
-      Vào Kênh Telegram Ngay
-    </a>
-
-    <!-- Features -->
-    <div class="features">
-      <div class="feat"><span class="feat-icon">🔔</span> Thông báo mỗi ngày</div>
-      <div class="feat"><span class="feat-icon">⚡</span> Cập nhật tức thì</div>
-      <div class="feat"><span class="feat-icon">🎁</span> Ưu đãi độc quyền</div>
+    <div class="adm-login-title">ADMIN PANEL</div>
+    <div class="adm-login-sub">Nhập mật khẩu để tiếp tục</div>
+    <p class="adm-err" id="adm-err">❌ Sai mật khẩu!</p>
+    <div class="adm-pw-wrap">
+      <input class="adm-pw" id="adm-pw" type="password" placeholder="••••••••" maxlength="20">
+      <button class="adm-eye" onclick="togglePw()">
+        <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
     </div>
-
+    <button class="adm-login-btn" onclick="admLogin()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      ĐĂNG NHẬP
+    </button>
+    <button class="adm-cls-btn" onclick="closeAdm()">HỦY</button>
   </div>
 
-  <!-- Footer -->
-  <div class="footer">
-    © 2026 · Cảm ơn bạn đã đồng hành cùng chúng tôi 🙏<br>
-    Website sẽ sớm trở lại với nhiều tính năng mới!
+  <!-- PANEL -->
+  <div id="adm-panel" class="adm-panel" style="display:none">
+    <div class="adm-panel-hdr">
+      <div class="adm-panel-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        ADMIN PANEL
+      </div>
+      <button onclick="closeAdm()" style="background:none;border:none;color:var(--ts);cursor:pointer;padding:4px;display:flex">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- GAME LINKS — sinh động từ danh sách game -->
+    <div class="adm-section">
+      <div class="adm-sec-hdr">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        LINK KEY &amp; TẢI MỖI GAME
+      </div>
+      <div id="adm-game-fields"><!-- sinh bởi admLoadLinks() --></div>
+    </div>
+
+    <!-- OTHER -->
+    <div class="adm-section">
+      <div class="adm-sec-hdr">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        KHÁC
+      </div>
+      <div class="adm-row"><span class="adm-lbl">Telegram Admin (mua key/ios)</span><input class="adm-inp" id="al-tg" placeholder="https://t.me/..."></div>
+    </div>
+
+    <button class="adm-save" onclick="admSave()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      LƯU TẤT CẢ
+    </button>
+    <div class="adm-saved-toast" id="adm-saved">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Đã lưu! App sẽ dùng link mới ngay.
+    </div>
+    <button class="adm-cls-btn" onclick="closeAdm()">ĐÓNG</button>
   </div>
 </div>
 </body>
