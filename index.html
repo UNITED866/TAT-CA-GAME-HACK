@@ -21,6 +21,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const LINKS_REF = db.ref('vhmods/links');
+const CODE_VERSION = Date.now(); // version của lần build này
+
 function loadFirebaseLinks() {
   LINKS_REF.on('value', snap => {
     const data = snap.val();
@@ -29,13 +31,13 @@ function loadFirebaseLinks() {
     if (admOverlay && admOverlay.classList.contains('open')) return;
     if (data.gameLinks && window.gameLinks) {
       for (const id in data.gameLinks) {
-        // CHỈ update game có sẵn trong code, KHÔNG thêm game lạ từ Firebase
+        // CHỈ update game có trong code — không thêm game lạ từ Firebase cũ
         if (window.gameLinks[id]) {
           const fb = data.gameLinks[id];
           if (fb.img    !== undefined) window.gameLinks[id].img    = fb.img;
           if (fb.key    !== undefined) window.gameLinks[id].key    = fb.key;
           if (fb.dl     !== undefined) window.gameLinks[id].dl     = fb.dl;
-          if (fb.obb    !== undefined) window.gameLinks[id].obb    = fb.obb;
+          if (fb.obb    !== undefined) window.gameLinks[id].obb    = fb.obb || '';
           if (fb.status !== undefined) window.gameLinks[id].status = fb.status;
         }
       }
@@ -469,7 +471,7 @@ footer b{color:var(--ts)}
       <div class="hama-sub" id="t-sys_sec">Hỗ Trợ Mod Game Uy Tín Số 1.</div>
 
       <div class="hama-social">
-        <a href="https://t.me/vhmodsgames" class="hsoc-btn hsoc-tg" target="_blank">
+        <a href="https://t.me/Vepspat" class="hsoc-btn hsoc-tg" target="_blank">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </a>
         <a href="#" class="hsoc-btn hsoc-yt" target="_blank">
@@ -692,15 +694,15 @@ const SVG = {
 };
 
 window.gameLinks = {
-  'fc_qt':    {name:'FC QUỐC TẾ JAVA',      tag:'HACK FC GLOBAL ANDROID',       icon:SVG.soccer,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/fRsQ',       dl:'https://vuotnhanh.com/fRsQ',       obb:''},
-  'fc_java':  {name:'FC VIỆT NAM JAVA',                tag:'HACK FC VN ANDROID',            icon:SVG.soccer,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/fRsQ',       dl:'https://vuotnhanh.com/fRsQ',       obb:''},
-  '8ball':    {name:'8 BALL POOL',       tag:'HACK 8 BALL POOL ANDROID',      icon:SVG.ball,    img:'', status:'online', isNew:true, key:'https://link4m.net/RXHNlx',       dl:'https://vuotnhanh.com/Psqg',       obb:''},
-  'lq_chap':  {name:'LIÊN QUÂN s38',   tag:'LIÊN QUÂN s38 ANDROID',    icon:SVG.shield,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/jtUw',       dl:'https://vuotnhanh.com/jtUw',       obb:''},
-  'lq_map':   {name:'LIÊN QUÂN 38 [TÁCH GỐC]',        tag:'LIÊN QUÂN s38 TÁCH GỐC ANDROID',    icon:SVG.shield,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/WkaM',       dl:'https://vuotnhanh.com/WkaM',       obb:''},
-  'pubg':     {name:'PUBG VIỆT NAM RED 4.4',           tag:'HACK PUBG MOBILE 4.4 ANDROID',      icon:SVG.target,  img:'', status:'online', isNew:true, key:'https://link4m.org/d2mbjiPC',     dl:'https://vuotnhanh.com/gWJH',       obb:''},
-  'pubg_ldr': {name:'PUBG QUỐC TẾ RED 4.4',           tag:'HACK PUBG MOBILE 4.4 ANDROID',      icon:SVG.target,  img:'', status:'online', isNew:true, key:'https://link4m.org/d2mbjiPC',     dl:'https://vuotnhanh.com/PixL',       obb:''},
-  'pt':       {name:'BLOOD STRIKE',              tag:'VIP', icon:SVG.house, img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/aOKr',       dl:'https://vuotnhanh.com/aOKr',       obb:''},
-  'cf':       {name:'CROSSFIRE LEGENDS',      tag:'Crossfire Legends ANDROID',     icon:SVG.flame,   img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/UDUP',       dl:'https://vuotnhanh.com/UDUP',       obb:''},
+  'fc_qt':    {name:'FC QUỐC TẾ JAVA',      tag:'HACK FC GLOBAL ANDROID',          icon:SVG.soccer, img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/fRsQ',   dl:'https://vuotnhanh.com/fRsQ',   obb:''},
+  'fc_java':  {name:'FC VIỆT NAM JAVA',                tag:'HACK FC VN ANDROID',              icon:SVG.soccer, img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/fRsQ',   dl:'https://vuotnhanh.com/fRsQ',   obb:''},
+  '8ball':    {name:'8 BALL POOL',       tag:'HACK 8 BALL POOL ANDROID',        icon:SVG.ball,   img:'', status:'online', isNew:true, key:'https://link4m.net/RXHNlx',   dl:'https://vuotnhanh.com/Psqg',   obb:''},
+  'lq_chap':  {name:'LIÊN QUÂN s38',   tag:'LIÊN QUÂN CHẤP TỐ ANDROID',      icon:SVG.shield, img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/jtUw',  dl:'https://vuotnhanh.com/jtUw',   obb:''},
+  'lq_map':   {name:'LIÊN QUÂN s38 TÁCH GỐC',        tag:'HACK MAP LIÊN QUÂN ANDROID',      icon:SVG.shield, img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/WkaM',  dl:'https://vuotnhanh.com/WkaM',   obb:''},
+  'pubg':     {name:'PUBG MOBILE VN 4.4',           tag:'HACK PUBG MOBILE ANDROID',        icon:SVG.target, img:'', status:'online', isNew:true, key:'https://link4m.org/d2mbjiPC', dl:'https://vuotnhanh.com/gWJH',   obb:''},
+  'pubg_ldr': {name:'PUBG MOBILE QT 4.4',           tag:'HACK PUBG MOBILE ANDROID',        icon:SVG.target, img:'', status:'online', isNew:true, key:'https://link4m.org/d2mbjiPC', dl:'https://vuotnhanh.com/PixL',   obb:''},
+  'pt':       {name:'BLOOD STRIKE',              tag:'CHƠI ĐC TRÊN BẢN QUỐC TẾ VÀ VN', icon:SVG.house,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/aOKr',  dl:'https://vuotnhanh.com/aOKr',   obb:''},
+  'cf':       {name:'CROSSFIRE LEGENDS',      tag:'Crossfire Legends ANDROID',       icon:SVG.flame,  img:'', status:'online', isNew:true, key:'https://vuotnhanh.com/UDUP',  dl:'https://vuotnhanh.com/UDUP',   obb:''},
 };
 const gameLinks = window.gameLinks;
 
@@ -751,23 +753,23 @@ function doGameDL(id) {
   const g = gameLinks[id];
   const t = T[lang];
   if (!g || (!g.dl && !g.obb)) { toast(lang==='vi'?'Tính năng đang bảo trì!':'Feature under maintenance!'); return; }
-  const hasDl = !!g.dl;
+  const hasDl  = !!g.dl;
   const hasObb = !!g.obb;
-  // Nếu chỉ có 1 loại → mở thẳng
-  if (hasDl && !hasObb) { openConfirm(t.dl_mod, `${t.conf_dl} <b style="color:var(--p)">${g.name}</b>?`, g.dl, t.agree); return; }
-  if (!hasDl && hasObb) { openConfirm('TẢI OBB GAME', `Tải OBB cho <b style="color:var(--p)">${g.name}</b>?`, g.obb, t.agree); return; }
-  // Có cả 2 → hiện modal chọn
   document.getElementById('dlc-title').textContent = g.name;
   const apkBtn = document.getElementById('dlc-apk-btn');
   const obbBtn = document.getElementById('dlc-obb-btn');
-  apkBtn.onclick = () => { closeOverlay('mod-dl-choice'); setTimeout(() => openConfirm(t.dl_mod, `${t.conf_dl} <b style="color:var(--p)">${g.name}</b>?`, g.dl, t.agree), 340); };
-  obbBtn.onclick = () => { closeOverlay('mod-dl-choice'); setTimeout(() => openConfirm('TẢI OBB GAME', `Tải OBB cho <b style="color:var(--p)">${g.name}</b>?`, g.obb, t.agree), 340); };
+  apkBtn.style.opacity = hasDl ? '1' : '0.35';
+  apkBtn.style.pointerEvents = hasDl ? '' : 'none';
+  obbBtn.style.opacity = hasObb ? '1' : '0.35';
+  obbBtn.style.pointerEvents = hasObb ? '' : 'none';
+  apkBtn.onclick = hasDl ? () => { closeOverlay('mod-dl-choice'); setTimeout(() => openConfirm(t.dl_mod, `${t.conf_dl} <b style="color:var(--p)">${g.name}</b>?`, g.dl, t.agree), 340); } : null;
+  obbBtn.onclick = hasObb ? () => { closeOverlay('mod-dl-choice'); setTimeout(() => openConfirm('TẢI OBB GAME', `Tải OBB cho <b style="color:var(--p)">${g.name}</b>?`, g.obb, t.agree), 340); } : null;
   openOverlay('mod-dl-choice');
 }
 
 // Nút Auto Get Key (card phía trên) — mở key cho game đầu tiên / hoặc dẫn tới shop key
 function doGetKey() {
-  window.open('https://t.me/Vepspat', '_blank');
+  window.open('https://shophama.com', '_blank');
 }
 
 renderGameGrid();
@@ -904,7 +906,7 @@ function admSave() {
   for (const id of Object.keys(gameLinks)) {
     gameLinks[id].img = v(`al-${id}-img`);
     gameLinks[id].key = v(`al-${id}-key`);
-    gameLinks[id].dl = v(`al-${id}-dl`);
+    gameLinks[id].dl  = v(`al-${id}-dl`);
     gameLinks[id].obb = v(`al-${id}-obb`);
     const statusEl = document.getElementById(`al-${id}-status`);
     if (statusEl) gameLinks[id].status = statusEl.value;
@@ -941,24 +943,6 @@ function loadSavedLinks() {
   loadFirebaseLinks();
 }
 loadSavedLinks();
-
-// Sau 2s, tự động đẩy danh sách game sạch lên Firebase để xoá data cũ
-setTimeout(() => {
-  if (!document.getElementById('adm-overlay').classList.contains('open')) {
-    const cleanGameLinks = {};
-    for (const id of Object.keys(window.gameLinks)) {
-      cleanGameLinks[id] = {
-        img: window.gameLinks[id].img || '',
-        key: window.gameLinks[id].key || '',
-        dl:  window.gameLinks[id].dl  || '',
-        obb: window.gameLinks[id].obb || '',
-        status: window.gameLinks[id].status || 'online',
-      };
-    }
-    const tgEl = document.getElementById('al-tg');
-    saveToFirebase({ gameLinks: cleanGameLinks, tg: (window._links && window._links.tg) || '' });
-  }
-}, 2000);
 
 
 </script>
